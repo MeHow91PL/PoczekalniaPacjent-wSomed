@@ -1,23 +1,40 @@
-﻿@using Poczekalniav1.Models;
-@model List<ProszonyPacjentModel>
-@{
+﻿@{
     ViewBag.Title = "Home Page";
 }
-<hr />
-@foreach (ProszonyPacjentModel item in Model)
-{
-    <div style="background: #00ff21; 
--moz-box-shadow: 5px 5px black; 
--webkit-box-shadow: 5px 5px black;
-box-shadow: 5px 5px black;
-text-align: center">
 
-        <div>
-            @item.NUMER_DZIENNY
-        </div>
-        <div>
-            Gabinet: @item.GABINET_NAZWA
-        </div>
-    </div>
-}
+
 <hr />
+<button onclick="run()">
+    Klick
+</button>
+
+<p id="tt">
+
+</p>
+
+<script>
+    var wzywany = { Numer: 1, Gabinet: "202" };
+    var ostWzywany = { Numer: 0, Gabinet: null };
+    var inter = setInterval(ttt, 5000);
+   
+    function ttt() {
+        console.log("##$$%%   %%$$##");
+        console.log("wzywany.Numer:" + wzywany.Numer );
+        console.log("ostWzywany.Numer: " + ostWzywany.Numer);
+        console.log("wzywany.Numer != ostWzywany.Numer = " + (wzywany.Numer != ostWzywany.Numer));
+        if (wzywany.Numer != ostWzywany.Numer) {
+            $('#tt').html("Pacjent z numerkiem " + wzywany.Numer + " proszony jest do gabinetu: " + wzywany.Gabinet);
+            ostWzywany.Numer = wzywany.Numer;
+            ostWzywany.Gabinet = wzywany.Gabinet;
+
+            clearInterval(inter);
+
+            console.log("Before TimeOut");
+            setTimeout(function () { inter = setInterval(ttt, 5000); console.log("After TimeOut");}, 15000);
+            
+        }
+
+        wzywany.Gabinet = "202";
+        wzywany.Numer = 2;
+    }
+</script>

@@ -11,14 +11,13 @@ namespace Poczekalniav1.Controllers
 {
     public class HomeController : Controller
     {
-        OracDbContext db = new OracDbContext();
-
+        //DbManager db = new OracleDbManager();
+        DbManager db = new LocalTestDbManager();
+            
         public ActionResult Index()
         {
-            List<ProszonyPacjentModel> t = 
-                db.Database.SqlQuery<ProszonyPacjentModel>("SELECT GABINET_NAZWA, NUMER_DZIENNY from PROSZENI_PACJENCI").ToList();
-            
-            return View(t);
+            List<ProszonyPacjentModel> model = db.PobierzProszonychPacjentow();
+            return View(model);
         }
 
         public ActionResult About()
