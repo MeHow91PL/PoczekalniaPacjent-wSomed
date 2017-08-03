@@ -12,7 +12,27 @@ namespace Poczekalniav1.DAL
     {
         OracDbContext db = new OracDbContext();
 
-        public override ushort IloscProszonychPacjentow { get; set; }
+        public override int IloscProszonychPacjentow
+        {
+            get { return PobierzProszonychPacjentow().Count; }
+        }
+
+        private Queue<ProszonyPacjentModel> _kolejkaWezwan = new Queue<ProszonyPacjentModel>();
+        public override Queue<ProszonyPacjentModel> KolejkaWezwan
+        {
+            get
+            {
+                if (IloscProszonychPacjentow > 0)
+                {
+                    foreach (var item in PobierzProszonychPacjentow())
+                    {
+                        _kolejkaWezwan.Enqueue(item);
+                    }
+                }
+                return _kolejkaWezwan;
+            }
+        }
+
 
         public override ProszonyPacjentModel PobierzProszonegoPacjentaPoId(int idPacjenta)
         {
@@ -21,8 +41,9 @@ namespace Poczekalniav1.DAL
 
         public override List<ProszonyPacjentModel> PobierzProszonychPacjentow()
         {
-            List<ProszonyPacjentModel> t =
-                db.Database.SqlQuery<ProszonyPacjentModel>("SELECT GABINET_NAZWA, NUMER_DZIENNY from PROSZENI_PACJENCI").ToList();
+        List<ProszonyPacjentModel> t =
+                db.Database.SqlQuery<ProszonyPacjentModel>("SELECT GABINET_ID, GABINET_NAZWA, GABINET_NUMER, NUMER_DZIENNY " +
+                    "from PROSZENI_PACJENCI").ToList();
             return t;
         }
 

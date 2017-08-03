@@ -2,39 +2,47 @@
     ViewBag.Title = "Home Page";
 }
 
-
+Wzywany numerek:
+@ViewBag.CzyPobrany
+@ViewBag.CzyPobrany3
 <hr />
-<button onclick="run()">
-    Klick
-</button>
 
-<p id="tt">
 
-</p>
+<div id="numerek">
+
+</div>
 
 <script>
-    var wzywany = { Numer: 1, Gabinet: "202" };
-    var ostWzywany = { Numer: 0, Gabinet: null };
-    var inter = setInterval(ttt, 5000);
-   
+    var inter = setInterval(ttt, 2000);
+    var licznik = 0;
+    var czyPobrany = "True";
     function ttt() {
-        console.log("##$$%%   %%$$##");
-        console.log("wzywany.Numer:" + wzywany.Numer );
-        console.log("ostWzywany.Numer: " + ostWzywany.Numer);
-        console.log("wzywany.Numer != ostWzywany.Numer = " + (wzywany.Numer != ostWzywany.Numer));
-        if (wzywany.Numer != ostWzywany.Numer) {
-            $('#tt').html("Pacjent z numerkiem " + wzywany.Numer + " proszony jest do gabinetu: " + wzywany.Gabinet);
-            ostWzywany.Numer = wzywany.Numer;
-            ostWzywany.Gabinet = wzywany.Gabinet;
+        console.log("######################################################################");
+        console.log("Interval nr " + licznik++);
 
-            clearInterval(inter);
+        $.ajax({
+            url: "/Home/WyswietlNumerek",
+            success: function (html) {
+                $("#numerek").html(html);
+            },
+        });
 
-            console.log("Before TimeOut");
-            setTimeout(function () { inter = setInterval(ttt, 5000); console.log("After TimeOut");}, 15000);
-            
-        }
+        $.ajax({
+            url: "/Home/CzyPobrany",
+            success: function (html) {
+                czyPobrany = html;
+                console.log("html = " + czyPobrany);
+                console.log("html type = " + typeof (czyPobrany));
 
-        wzywany.Gabinet = "202";
-        wzywany.Numer = 2;
+                console.log("czyPobrany = " + czyPobrany);
+                console.log("czyPobrany type = " + typeof (czyPobrany));
+
+                if (czyPobrany == "True") {
+                    clearInterval(inter);
+                    console.log("TimeOut");
+                    setTimeout(function () { inter = setInterval(ttt, 2000); console.log("After TimeOut"); }, 15000);
+                }
+            },
+        });
     }
 </script>

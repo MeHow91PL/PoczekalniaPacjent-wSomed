@@ -9,8 +9,8 @@ namespace Poczekalniav1.DAL
 {
     public abstract class DbManager
     {
-        public abstract ushort IloscProszonychPacjentow { get; set; }
-
+        public abstract int IloscProszonychPacjentow { get;  }
+        public abstract Queue<ProszonyPacjentModel> KolejkaWezwan { get; }
         public abstract ProszonyPacjentModel PobierzProszonegoPacjentaPoId(int numerDzienny);
         public abstract List<ProszonyPacjentModel> PobierzProszonychPacjentow();
         public abstract List<ProszonyPacjentModel> PobierzProszonychPacjentow(int idPoczekalni);

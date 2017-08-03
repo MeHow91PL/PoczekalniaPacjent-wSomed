@@ -11,49 +11,49 @@ namespace Poczekalniav1.Controllers
 {
     public class HomeController : Controller
     {
-        //DbManager db = new OracleDbManager();
-        DbManager db = new LocalTestDbManager();
-            
+        DbManager db = new OracleDbManager();
+        //DbManager db = new LocalTestDbManager();
+
         public ActionResult Index()
         {
             List<ProszonyPacjentModel> model = db.PobierzProszonychPacjentow();
             return View(model);
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
+        static List<ProszonyPacjentModel> listaWezwanych = new List<ProszonyPacjentModel>();
+        static bool czyPobrany = false;
+        static Queue<ProszonyPacjentModel> kolejkaWezwań = new Queue<ProszonyPacjentModel>();
 
-            return View();
+        public PartialViewResult WyswietlNumerek()
+        {
+            czyPobrany = false;
+            ProszonyPacjentModel model = null;
+            if (kolejkaWezwań.Count > 0)
+            {
+                ProszonyPacjentModel peek = kolejkaWezwań.Peek();
+                if (listaWezwanych.Exists(p => p.NUMER_DZIENNY == peek.NUMER_DZIENNY))
+                {
+                    kolejkaWezwań.Dequeue();
+                }
+                else if (kolejkaWezwań.Count > 0)
+                {
+                    model = kolejkaWezwań.Dequeue();
+                    listaWezwanych.Add(model);
+                    czyPobrany = true;
+                }
+            }
+            else
+            {
+                listaWezwanych = db.PobierzProszonychPacjentow().FindAll(w => listaWezwanych.Exists(l => l.NUMER_DZIENNY == w.NUMER_DZIENNY));
+                kolejkaWezwań = db.KolejkaWezwan;
+            }
+
+            return PartialView(model);
         }
 
-        public ActionResult Contact()
+        public bool CzyPobrany()
         {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            return czyPobrany;
         }
     }
-    //public delegate void test();
-    //public class ListaPacjentowManager
-    //{
-    //    OracDbContext db = new OracDbContext();
-
-    //    public event test TestEvent;
-    //    static List<ProszonyPacjentModel> proszeniPacjenci;
-
-    //    public ListaPacjentowManager()
-    //    {
-    //        proszeniPacjenci = new List<ProszonyPacjentModel>();
-    //    }
-
-    //    public void UruchomNasluch()
-    //    {
-    //        while (true)
-    //        {
-    //            db.Database.SqlQuery
-    //        }
-    //    }
-        
-    //}
 }

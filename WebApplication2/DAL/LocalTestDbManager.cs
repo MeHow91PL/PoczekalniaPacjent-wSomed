@@ -14,7 +14,9 @@ namespace Poczekalniav1.DAL
             new ProszonyPacjentModel{ GABINET_NAZWA = "Gabinet 20", NUMER_DZIENNY = 3}
         };
 
-        public override ushort IloscProszonychPacjentow { get; set; }
+        public override int IloscProszonychPacjentow { get;}
+
+        public override Queue<ProszonyPacjentModel> KolejkaWezwan => throw new NotImplementedException();
 
         public override ProszonyPacjentModel PobierzProszonegoPacjentaPoId(int numerDzienny)
         {
