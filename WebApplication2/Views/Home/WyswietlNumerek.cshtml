@@ -1,32 +1,23 @@
 ﻿@using Poczekalniav1.Models;
 @model ProszonyPacjentModel
-<hr />
-<hr />
 @{
     if (Model != null)
     {
-
-        <div style="background: #00ff21;
-            -moz-box-shadow: 5px 5px black;
-            -webkit-box-shadow: 5px 5px black;
-            box-shadow: 5px 5px black;
-            text-align: center;
-            width:300px">
-
-            <div>
-                @Model.NUMER_DZIENNY
-            </div>
-            <div>
-                Gabinet: @Model.GABINET_NAZWA
+        <div class="kontenerKafelka">
+            <div class="wycentrujWertykalnie">
+                <div class="kafelekNumerka">
+                    <div class="numerPacjenta">
+                        @Model.NUMER_DZIENNY
+                    </div>
+                    <div class="nazwaGabinetu">
+                        @Model.GABINET_NAZWA
+                    </div>
+                </div>
             </div>
         </div>
     }
     else
     {
-        <div>
-            Super Medikor!
-        </div>
+        
     }
 }
-<hr />
-<hr />

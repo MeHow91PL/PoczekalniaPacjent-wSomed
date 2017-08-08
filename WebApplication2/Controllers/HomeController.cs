@@ -6,19 +6,87 @@ using System.Web.Mvc;
 using Poczekalniav1.DAL;
 using Poczekalniav1.Models;
 using System.Data.Entity.Infrastructure;
+using System.Threading;
+using Poczekalniav1.Infrastructure;
+using System.Diagnostics;
+using System.IO;
 
 namespace Poczekalniav1.Controllers
 {
     public class HomeController : Controller
     {
-        DbManager db = new OracleDbManager();
+        OracleDbManager db = new OracleDbManager();
         //DbManager db = new LocalTestDbManager();
 
         public ActionResult Index()
         {
-            List<ProszonyPacjentModel> model = db.PobierzProszonychPacjentow();
-            return View(model);
+            try
+            {
+                bool wczytanoConfig = WczytajConfig();
+                if (!wczytanoConfig)
+                {
+                    OknoOpcji();
+                }
+                OpcjeModel opcjeModel = OpcjeAplikacjiManager.GetOpcjeModel();
+                return View(opcjeModel);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
+
+        private bool WczytajConfig()
+        {
+            try
+            {
+                db.PodlaczDoBazy();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public struct DbInfo { public string DataSourcce { get; set; } public string ConnString { get; set; } }
+        public JsonResult GetDbInfo()
+        {
+            DbInfo inf = db.GetDbInfo();
+            return Json(inf, JsonRequestBehavior.AllowGet);
+        }
+
+        public PartialViewResult OknoOpcji()
+        {
+            OpcjeModel model = OpcjeAplikacjiManager.GetOpcjeModel();
+            return PartialView(model);
+        }
+
+        [HttpPost]
+        public ActionResult ZapiszOpcje()
+        {
+            int i = Request.Files.Count;
+            try
+            {
+                //OpcjeAplikacjiManager.BackgroundColor = model.BackgroundColor;
+                //OpcjeAplikacjiManager.DatabaseConnectionString = model.DatabaseConnString.ConnectionString;
+                //if (model.BackgroundImg != null && model.BackgroundImg.ContentLength > 0)
+                //{
+                //    string path = Path.Combine(Server.MapPath("~/Images"),
+                //                               Path.GetFileName(model.BackgroundImg.FileName));
+                //    model.BackgroundImg.SaveAs(path);
+                //    OpcjeAplikacjiManager.BackgroundImage = model.BackgroundImg.FileName;
+                //}
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
+        }
+
+
 
         static List<ProszonyPacjentModel> listaWezwanych = new List<ProszonyPacjentModel>();
         static bool czyPobrany = false;

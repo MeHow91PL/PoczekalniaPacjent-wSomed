@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+  <!--<DatabaseConfiguration>
+    <Serwer>localhost</Serwer>
+    <UserId>gabinet</UserId>
+    <Password>Kam$oft1</Password>
+    <ConnectionString>User Id=gabinet;Password=Kam$oft1;Data Source=localhost</ConnectionString>
+  </DatabaseConfiguration>-->
+  <UserConfig>
+    <BackgroundImage>
+      <Url></Url>
+    </BackgroundImage>
+    <BackgroundColor>
+      <Color>#eeeecc</Color>
+    </BackgroundColor>
+  </UserConfig>
+</Configuration>

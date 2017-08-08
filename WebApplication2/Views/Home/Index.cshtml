@@ -1,24 +1,56 @@
-﻿@{
+﻿@model Poczekalniav1.Models.OpcjeModel
+@{
     ViewBag.Title = "Home Page";
 }
+@section styles{
+    <style>
+        body{
+            background-color: @Model.BackgroundColor;
+        }
+    </style>
+    }
 
-Wzywany numerek:
-@ViewBag.CzyPobrany
-@ViewBag.CzyPobrany3
-<hr />
-
-
-<div id="numerek">
-
+<div id="OpcjeWindow" style="display:none">
+    
 </div>
 
-<script>
+<div id="numerek">
+</div>
+
+<footer></footer>
+@section scripts{
+    <script>
     var inter = setInterval(ttt, 2000);
     var licznik = 0;
     var czyPobrany = "True";
+    $(function () {
+        $(document).keyup(function (e) {
+
+            if (e.keyCode == 27) {
+                var opcjeWindow = $("#OpcjeWindow");
+                console.log(opcjeWindow.css("display"));
+                console.log("Type: " + typeof (opcjeWindow.css("display")));
+
+                if (opcjeWindow.css("display") == "none") {
+                    $.ajax({
+                        url: "/Home/OknoOpcji",
+                        success: function (html) {
+                            opcjeWindow.html(html);
+                           opcjeWindow.css("display", "block");
+                        },
+                    });
+                }
+                else {
+                    opcjeWindow.css("display", "none");
+                }
+            }
+        });
+    });
+
     function ttt() {
-        console.log("######################################################################");
-        console.log("Interval nr " + licznik++);
+        //console.log("######################################################################");
+        //console.log("Interval nr " + licznik++);
+        clearInterval(inter);
 
         $.ajax({
             url: "/Home/WyswietlNumerek",
@@ -28,21 +60,34 @@ Wzywany numerek:
         });
 
         $.ajax({
+            url: "/Home/GetDbInfo",
+            success: function (html) {
+                @*console.log("------------------------------- DbInfo ------------------------------");
+                console.log("@DateTime.Now.TimeOfDay" + " || DataSource: " + html.DataSource);
+                console.log("@DateTime.Now.TimeOfDay" + " || Connstring " + html.ConnString);
+                console.log("------------------------------- End DbInfo ------------------------------");*@
+            },
+        });
+
+        $.ajax({
             url: "/Home/CzyPobrany",
             success: function (html) {
                 czyPobrany = html;
-                console.log("html = " + czyPobrany);
-                console.log("html type = " + typeof (czyPobrany));
+                //console.log("html = " + czyPobrany);
+                //console.log("html type = " + typeof (czyPobrany));
 
-                console.log("czyPobrany = " + czyPobrany);
-                console.log("czyPobrany type = " + typeof (czyPobrany));
+                //console.log("czyPobrany = " + czyPobrany);
+                //console.log("czyPobrany type = " + typeof (czyPobrany));
 
                 if (czyPobrany == "True") {
-                    clearInterval(inter);
                     console.log("TimeOut");
                     setTimeout(function () { inter = setInterval(ttt, 2000); console.log("After TimeOut"); }, 15000);
+                }
+                else {
+                    inter = setInterval(ttt, 2000);
                 }
             },
         });
     }
-</script>
+    </script>
+}

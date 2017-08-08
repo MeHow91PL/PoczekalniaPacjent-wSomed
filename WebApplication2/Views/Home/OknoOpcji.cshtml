@@ -1,0 +1,35 @@
+﻿@model Poczekalniav1.Models.OpcjeModel
+
+    <div class="wycentrujWertykalnie">
+        <div id="OpcjeWindowKontener">
+            <div id="OpcjeWindowZawartosc">
+                
+                @using (@Html.BeginForm("ZapiszOpcje", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <table>
+                        <tr>
+                            <td>@Html.LabelFor(m => m.BackgroundColor) </td>
+                            <td>@Html.EditorFor(m => m.BackgroundColor) </td>
+                        </tr>
+                        <tr>
+                            <td>@Html.LabelFor(m => m.DatabaseConnString.ConnectionString) </td>
+                            <td>@Html.EditorFor(m => m.DatabaseConnString.ConnectionString) </td>
+                        </tr>
+                        <tr>
+                            <td>@*@Html.EditorFor(m => m.BackgroundImg, new { @type="file" })*@
+                                <input type="file" name="BackgroundImgage" value="" />
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button type="submit">Zapisz</button>
+                            </td>
+                        </tr>
+                    </table>
+                }
+
+            </div>
+        </div>
+    </div>
+

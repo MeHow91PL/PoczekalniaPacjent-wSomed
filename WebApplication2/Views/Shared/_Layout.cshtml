@@ -7,10 +7,10 @@
     <title>@ViewBag.Title — moja aplikacja platformy ASP.NET</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("styles",required: false)
 </head>
 <body>
-    Body::
-    <div class="container body-content">
+    <div class="container body-content" style="background-image:">
         @RenderBody()
     </div>
 

@@ -18,6 +18,11 @@ namespace Poczekalniav1.DAL
 
         public override Queue<ProszonyPacjentModel> KolejkaWezwan => throw new NotImplementedException();
 
+        public override void PodlaczDoBazy()
+        {
+            throw new NotImplementedException();
+        }
+
         public override ProszonyPacjentModel PobierzProszonegoPacjentaPoId(int numerDzienny)
         {
             if (!testowaLista.Exists(n => n.NUMER_DZIENNY == numerDzienny))
@@ -41,5 +46,6 @@ namespace Poczekalniav1.DAL
         {
             return testowaLista.FindAll(p => p.GABINET_NAZWA == nazwaGabinetu);
         }
+
     }
 }

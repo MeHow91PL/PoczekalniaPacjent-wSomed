@@ -5,12 +5,47 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Web;
 using Poczekalniav1.Models;
+using Poczekalniav1.Infrastructure;
+using static Poczekalniav1.Controllers.HomeController;
 
 namespace Poczekalniav1.DAL
 {
     public class OracleDbManager : DbManager
     {
+        private string connString = OpcjeAplikacjiManager.DatabaseConnectionString;
         OracDbContext db = new OracDbContext();
+
+        public DbInfo GetDbInfo()
+        {
+            DbInfo dbinfo = new DbInfo { ConnString = db.Database.Connection.ConnectionString, DataSourcce = db.Database.Connection.DataSource };
+            return dbinfo ;
+        }
+
+
+        //"User Id=gabinet;Password=Kam$oft1;Data Source=localhost"
+        public override void PodlaczDoBazy()
+        {
+            db.Database.Connection.ConnectionString = OpcjeAplikacjiManager.DatabaseConnectionString;
+            if (!PolaczonoZBaza)
+            {
+                throw new Exception("Nie udało się nawiązać połączenia z bazą danych! /n" +
+                    "Szczególy: ");
+            }
+        }
+
+        public bool PolaczonoZBaza
+        {
+            get
+            {
+                try
+                {
+                    db.Database.Connection.Open();
+                    db.Database.Connection.Close();
+                    return true;
+                }
+                catch (Exception) { return false; }
+            }
+        }
 
         public override int IloscProszonychPacjentow
         {
@@ -41,9 +76,9 @@ namespace Poczekalniav1.DAL
 
         public override List<ProszonyPacjentModel> PobierzProszonychPacjentow()
         {
-        List<ProszonyPacjentModel> t =
-                db.Database.SqlQuery<ProszonyPacjentModel>("SELECT GABINET_ID, GABINET_NAZWA, GABINET_NUMER, NUMER_DZIENNY " +
-                    "from PROSZENI_PACJENCI").ToList();
+            List<ProszonyPacjentModel> t =
+                    db.Database.SqlQuery<ProszonyPacjentModel>("SELECT GABINET_ID, GABINET_NAZWA, GABINET_NUMER, NUMER_DZIENNY " +
+                        "from PROSZENI_PACJENCI").ToList();
             return t;
         }
 
@@ -62,7 +97,7 @@ namespace Poczekalniav1.DAL
 
             public OracDbContext() : base("OracleDbContext")
             {
-
+                this.Database.Connection.ConnectionString = OpcjeAplikacjiManager.DatabaseConnectionString;
             }
 
 
