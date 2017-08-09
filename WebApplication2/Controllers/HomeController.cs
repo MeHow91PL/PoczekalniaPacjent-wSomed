@@ -6,17 +6,20 @@ using System.Web.Mvc;
 using Poczekalniav1.DAL;
 using Poczekalniav1.Models;
 using System.Data.Entity.Infrastructure;
-using System.Threading;
 using Poczekalniav1.Infrastructure;
 using System.Diagnostics;
 using System.IO;
+using Microsoft.AspNet.SignalR;
+using Poczekalniav1.Hubs;
+using System.Timers;
 
 namespace Poczekalniav1.Controllers
 {
     public class HomeController : Controller
     {
-        OracleDbManager db = new OracleDbManager();
-        //DbManager db = new LocalTestDbManager();
+        //OracleDbManager db = new OracleDbManager();
+        DbManager db = new LocalTestDbManager();
+        Timer timer1 = new Timer(10000);
 
         public ActionResult Index()
         {
@@ -28,12 +31,20 @@ namespace Poczekalniav1.Controllers
                     OknoOpcji();
                 }
                 OpcjeModel opcjeModel = OpcjeAplikacjiManager.GetOpcjeModel();
+                timer1.Elapsed += Timer1_Elapsed;
+                timer1.Start();
+
                 return View(opcjeModel);
             }
             catch (Exception ex)
             {
                 throw;
             }
+        }
+
+        private void Timer1_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            WyswietlNumerek();
         }
 
         private bool WczytajConfig()
@@ -49,12 +60,12 @@ namespace Poczekalniav1.Controllers
             }
         }
 
-        public struct DbInfo { public string DataSourcce { get; set; } public string ConnString { get; set; } }
-        public JsonResult GetDbInfo()
-        {
-            DbInfo inf = db.GetDbInfo();
-            return Json(inf, JsonRequestBehavior.AllowGet);
-        }
+        //public struct DbInfo { public string DataSourcce { get; set; } public string ConnString { get; set; } }
+        //public JsonResult GetDbInfo()
+        //{
+        //    DbInfo inf = db.GetDbInfo();
+        //    return Json(inf, JsonRequestBehavior.AllowGet);
+        //}
 
         public PartialViewResult OknoOpcji()
         {
@@ -62,14 +73,9 @@ namespace Poczekalniav1.Controllers
             return PartialView(model);
         }
 
-        public JsonResult testt()
+        public void testt(object state)
         {
-            OpcjeModel mod = new OpcjeModel();
-            mod.BackgroundColor = "#fff333";
-            mod.DatabaseConnString.ConnectionString = "User Id=gabinet;Password=Kam$oft1;Data Source=localhost";
-            mod.BackgroundImg = " testimg.png";
 
-            return Json(mod, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -103,41 +109,47 @@ namespace Poczekalniav1.Controllers
         static bool czyPobrany = false;
         static Queue<ProszonyPacjentModel> kolejkaWezwań = new Queue<ProszonyPacjentModel>();
 
-        public PartialViewResult WyswietlNumerek()
+        public void WyswietlNumerek()
         {
-            ProszonyPacjentModel model = null;
+            //czyPobrany = false;
+            //ProszonyPacjentModel model = null;
+            //if (kolejkaWezwań.Count > 0)
+            //{
+            //    ProszonyPacjentModel peek = kolejkaWezwań.Peek();
+            //    if (listaWezwanych.Exists(p => p.NUMER_DZIENNY == peek.NUMER_DZIENNY))
+            //    {
+            //        kolejkaWezwań.Dequeue();
+            //    }
+            //    else if (kolejkaWezwań.Count > 0)
+            //    {
+            //        model = kolejkaWezwań.Dequeue();
+            //        listaWezwanych.Add(model);
+            //        czyPobrany = true;
+            //        IHubContext context = GlobalHost.ConnectionManager.GetHubContext<TestHub>();
+            //        context.Clients.All.wyswietlNumerek(PartialView(model));
+            //    }
+            //}
+            //else
+            //{
+            //    listaWezwanych = db.PobierzProszonychPacjentow().FindAll(w => listaWezwanych.Exists(l => l.NUMER_DZIENNY == w.NUMER_DZIENNY));
+            //    kolejkaWezwań = db.KolejkaWezwan;
+            //}
+
+            if (db.PobierzProszonychPacjentow()[0] != null)
+            {
+
+                ProszonyPacjentModel model = db.PobierzProszonychPacjentow()[0];
+                
+                IHubContext context = GlobalHost.ConnectionManager.GetHubContext<TestHub>();
+                context.Clients.All.wyswietlNumerek(model);
+            }
+
+
         }
 
-        ////public PartialViewResult WyswietlNumerek()
-        //{
-        //    czyPobrany = false;
-        //    ProszonyPacjentModel model = null;
-        //    if (kolejkaWezwań.Count > 0)
-        //    {
-        //        ProszonyPacjentModel peek = kolejkaWezwań.Peek();
-        //        if (listaWezwanych.Exists(p => p.NUMER_DZIENNY == peek.NUMER_DZIENNY))
-        //        {
-        //            kolejkaWezwań.Dequeue();
-        //        }
-        //        else if (kolejkaWezwań.Count > 0)
-        //        {
-        //            model = kolejkaWezwań.Dequeue();
-        //            listaWezwanych.Add(model);
-        //            czyPobrany = true;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        listaWezwanych = db.PobierzProszonychPacjentow().FindAll(w => listaWezwanych.Exists(l => l.NUMER_DZIENNY == w.NUMER_DZIENNY));
-        //        kolejkaWezwań = db.KolejkaWezwan;
-        //    }
-
-        //    return PartialView(model);
-        //}
-
-        //public bool CzyPobrany()
-        //{
-        //    return czyPobrany;
-        //}
+        public bool CzyPobrany()
+        {
+            return czyPobrany;
+        }
     }
 }

@@ -9,7 +9,7 @@
   <UserConfig>
     <BackgroundImage>
       <FileName>medikor-logo_70757_h500.png</FileName>
-      <Opacity>50</Opacity>
+      <Opacity>100</Opacity>
     </BackgroundImage>
     <BackgroundColor>
       <Color>#F1F1F1</Color>

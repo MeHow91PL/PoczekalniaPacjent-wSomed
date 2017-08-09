@@ -14,9 +14,26 @@ namespace Poczekalniav1.DAL
             new ProszonyPacjentModel{ GABINET_NAZWA = "Gabinet 20", NUMER_DZIENNY = 3}
         };
 
-        public override int IloscProszonychPacjentow { get;}
+        public override int IloscProszonychPacjentow
+        {
+            get { return testowaLista.Count; }
+        }
 
-        public override Queue<ProszonyPacjentModel> KolejkaWezwan => throw new NotImplementedException();
+        private Queue<ProszonyPacjentModel> _kolejkaWezwan = new Queue<ProszonyPacjentModel>();
+        public override Queue<ProszonyPacjentModel> KolejkaWezwan
+        {
+            get
+            {
+                if (IloscProszonychPacjentow > 0)
+                {
+                    foreach (var item in PobierzProszonychPacjentow())
+                    {
+                        _kolejkaWezwan.Enqueue(item);
+                    }
+                }
+                return _kolejkaWezwan;
+            }
+        }
 
         public override void PodlaczDoBazy()
         {

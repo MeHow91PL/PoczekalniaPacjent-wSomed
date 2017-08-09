@@ -15,11 +15,11 @@ namespace Poczekalniav1.DAL
         private string connString = OpcjeAplikacjiManager.DatabaseConnectionString;
         OracDbContext db = new OracDbContext();
 
-        public DbInfo GetDbInfo()
-        {
-            DbInfo dbinfo = new DbInfo { ConnString = db.Database.Connection.ConnectionString, DataSourcce = db.Database.Connection.DataSource };
-            return dbinfo ;
-        }
+        //public DbInfo GetDbInfo()
+        //{
+        //    DbInfo dbinfo = new DbInfo { ConnString = db.Database.Connection.ConnectionString, DataSourcce = db.Database.Connection.DataSource };
+        //    return dbinfo ;
+        //}
 
 
         //"User Id=gabinet;Password=Kam$oft1;Data Source=localhost"

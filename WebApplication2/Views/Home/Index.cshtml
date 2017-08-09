@@ -3,7 +3,7 @@
     ViewBag.Title = "Home Page";
 }
 @section styles{
-<style>
+    <style>
 .body-content {
     background-color: @Model.BackgroundColor;
 }
@@ -12,38 +12,80 @@
     background-image: url(../../Content/Images/@Model.BackgroundImg);
     opacity: calc(@Model.BackgroundImgOpacity/100);
 }
-    
-    
-</style>
+
+
+    </style>
 }
 <div id="OpcjeWindow" style="display:none">
     @Html.Partial("OknoOpcji")
 </div>
 
-<div id="numerek">
-    @*<div class="kontenerKafelka">
-        <div class="wycentrujWertykalnie">
-            <div class="kafelekNumerka">
-                <div class="numerPacjenta">
-                    20
-                </div>
-                <div class="nazwaGabinetu">
-                    NFZ GINEKOLOG
+<input type="text" name="testTxt" id="testTxt" value="" />
+<button onclick="testttt()">Test</button>
+
+
+
+
+
+Client:
+<div id="klient"></div>
+
+
+
+
+<div id="numerek" style="display:none">
+    <div class="kontenerKafelka">
+            <div class="wycentrujWertykalnie">
+                <div class="kafelekNumerka">
+                    <div class="numerPacjenta" id="numerPacjenta">
+                        20
+                    </div>
+                    <div class="nazwaGabinetu" id="nazwaGabinetu">
+                        NFZ GINEKOLOG
+                    </div>
                 </div>
             </div>
         </div>
-    </div>*@
 </div>
 
 
 <footer></footer>
 @section scripts{
+    <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
+    <script src="~/signalr/hubs"></script>
     <script>
-    var inter = setInterval(ttt, 2000);
+
+        function testttt() {
+            $.ajax({
+                url: "/Home/testt"
+            })
+        }
+
+
+
+    //var inter = setInterval(ttt, 2000);
     var licznik = 0;
         var czyPobrany = "True";
 
         $(function () {
+            $.connection.hub.start();
+            var clientHub = $.connection.testHub;
+
+            clientHub.client.wyswietlNumerek = function (message) {
+                console.log(message);
+                $("#numerPacjenta").html(message.NUMER_DZIENNY);
+                $("#nazwaGabinetu").html(message.GABINET_NAZWA);
+                $("#numerek").css("display", "block");
+
+                setTimeout(function () { $("#numerek").css("display", "none");}, 9000);
+
+            };
+
+
+            
+
+
+
         $(document).keyup(function (e) {
 
             if (e.keyCode == 27) {
