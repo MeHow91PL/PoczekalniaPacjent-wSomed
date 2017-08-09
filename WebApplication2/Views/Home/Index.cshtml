@@ -3,42 +3,61 @@
     ViewBag.Title = "Home Page";
 }
 @section styles{
-    <style>
-        body{
-            background-color: @Model.BackgroundColor;
-        }
-    </style>
-    }
+<style>
+.body-content {
+    background-color: @Model.BackgroundColor;
+}
 
-<div id="OpcjeWindow" style="display:none">
+.body-bgimage {
+    background-image: url(../../Content/Images/@Model.BackgroundImg);
+    opacity: calc(@Model.BackgroundImgOpacity/100);
+}
     
+    
+</style>
+}
+<div id="OpcjeWindow" style="display:none">
+    @Html.Partial("OknoOpcji")
 </div>
 
 <div id="numerek">
+    @*<div class="kontenerKafelka">
+        <div class="wycentrujWertykalnie">
+            <div class="kafelekNumerka">
+                <div class="numerPacjenta">
+                    20
+                </div>
+                <div class="nazwaGabinetu">
+                    NFZ GINEKOLOG
+                </div>
+            </div>
+        </div>
+    </div>*@
 </div>
+
 
 <footer></footer>
 @section scripts{
     <script>
     var inter = setInterval(ttt, 2000);
     var licznik = 0;
-    var czyPobrany = "True";
-    $(function () {
+        var czyPobrany = "True";
+
+        $(function () {
         $(document).keyup(function (e) {
 
             if (e.keyCode == 27) {
                 var opcjeWindow = $("#OpcjeWindow");
-                console.log(opcjeWindow.css("display"));
-                console.log("Type: " + typeof (opcjeWindow.css("display")));
 
                 if (opcjeWindow.css("display") == "none") {
-                    $.ajax({
-                        url: "/Home/OknoOpcji",
-                        success: function (html) {
-                            opcjeWindow.html(html);
-                           opcjeWindow.css("display", "block");
-                        },
-                    });
+                    //$.ajax({
+                    //    url: "/Home/OknoOpcji",
+                    //    success: function (html) {
+                    //        opcjeWindow.html(html);
+                    //       opcjeWindow.css("display", "block");
+                    //    },
+                    //});
+                   opcjeWindow.css("display", "block");
                 }
                 else {
                     opcjeWindow.css("display", "none");

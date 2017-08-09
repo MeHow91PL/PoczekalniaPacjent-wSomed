@@ -62,21 +62,32 @@ namespace Poczekalniav1.Controllers
             return PartialView(model);
         }
 
-        [HttpPost]
-        public ActionResult ZapiszOpcje()
+        public JsonResult testt()
         {
-            int i = Request.Files.Count;
+            OpcjeModel mod = new OpcjeModel();
+            mod.BackgroundColor = "#fff333";
+            mod.DatabaseConnString.ConnectionString = "User Id=gabinet;Password=Kam$oft1;Data Source=localhost";
+            mod.BackgroundImg = " testimg.png";
+
+            return Json(mod, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult ZapiszOpcje(OpcjeModel model)
+        {
             try
             {
-                //OpcjeAplikacjiManager.BackgroundColor = model.BackgroundColor;
-                //OpcjeAplikacjiManager.DatabaseConnectionString = model.DatabaseConnString.ConnectionString;
-                //if (model.BackgroundImg != null && model.BackgroundImg.ContentLength > 0)
-                //{
-                //    string path = Path.Combine(Server.MapPath("~/Images"),
-                //                               Path.GetFileName(model.BackgroundImg.FileName));
-                //    model.BackgroundImg.SaveAs(path);
-                //    OpcjeAplikacjiManager.BackgroundImage = model.BackgroundImg.FileName;
-                //}
+                OpcjeAplikacjiManager.DatabaseConnectionString = model.DatabaseConnString.ConnectionString;
+                OpcjeAplikacjiManager.BackgroundColor = model.BackgroundColor;
+                OpcjeAplikacjiManager.BackgroundImageOpacity = model.BackgroundImgOpacity;
+                HttpPostedFileBase img = Request.Files[0];
+                if (img != null && img.ContentLength > 0)
+                {
+                    string path = Path.Combine(Server.MapPath("~/Content/Images"),
+                                               Path.GetFileName(img.FileName));
+                    img.SaveAs(path);
+                    OpcjeAplikacjiManager.BackgroundImage = img.FileName;
+                }
 
                 return RedirectToAction("Index");
             }
@@ -94,34 +105,39 @@ namespace Poczekalniav1.Controllers
 
         public PartialViewResult WyswietlNumerek()
         {
-            czyPobrany = false;
             ProszonyPacjentModel model = null;
-            if (kolejkaWezwań.Count > 0)
-            {
-                ProszonyPacjentModel peek = kolejkaWezwań.Peek();
-                if (listaWezwanych.Exists(p => p.NUMER_DZIENNY == peek.NUMER_DZIENNY))
-                {
-                    kolejkaWezwań.Dequeue();
-                }
-                else if (kolejkaWezwań.Count > 0)
-                {
-                    model = kolejkaWezwań.Dequeue();
-                    listaWezwanych.Add(model);
-                    czyPobrany = true;
-                }
-            }
-            else
-            {
-                listaWezwanych = db.PobierzProszonychPacjentow().FindAll(w => listaWezwanych.Exists(l => l.NUMER_DZIENNY == w.NUMER_DZIENNY));
-                kolejkaWezwań = db.KolejkaWezwan;
-            }
-
-            return PartialView(model);
         }
 
-        public bool CzyPobrany()
-        {
-            return czyPobrany;
-        }
+        ////public PartialViewResult WyswietlNumerek()
+        //{
+        //    czyPobrany = false;
+        //    ProszonyPacjentModel model = null;
+        //    if (kolejkaWezwań.Count > 0)
+        //    {
+        //        ProszonyPacjentModel peek = kolejkaWezwań.Peek();
+        //        if (listaWezwanych.Exists(p => p.NUMER_DZIENNY == peek.NUMER_DZIENNY))
+        //        {
+        //            kolejkaWezwań.Dequeue();
+        //        }
+        //        else if (kolejkaWezwań.Count > 0)
+        //        {
+        //            model = kolejkaWezwań.Dequeue();
+        //            listaWezwanych.Add(model);
+        //            czyPobrany = true;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        listaWezwanych = db.PobierzProszonychPacjentow().FindAll(w => listaWezwanych.Exists(l => l.NUMER_DZIENNY == w.NUMER_DZIENNY));
+        //        kolejkaWezwań = db.KolejkaWezwan;
+        //    }
+
+        //    return PartialView(model);
+        //}
+
+        //public bool CzyPobrany()
+        //{
+        //    return czyPobrany;
+        //}
     }
 }

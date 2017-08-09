@@ -1,35 +1,68 @@
 ﻿@model Poczekalniav1.Models.OpcjeModel
 
-    <div class="wycentrujWertykalnie">
-        <div id="OpcjeWindowKontener">
-            <div id="OpcjeWindowZawartosc">
-                
-                @using (@Html.BeginForm("ZapiszOpcje", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                {
-                    <table>
-                        <tr>
-                            <td>@Html.LabelFor(m => m.BackgroundColor) </td>
-                            <td>@Html.EditorFor(m => m.BackgroundColor) </td>
-                        </tr>
-                        <tr>
-                            <td>@Html.LabelFor(m => m.DatabaseConnString.ConnectionString) </td>
-                            <td>@Html.EditorFor(m => m.DatabaseConnString.ConnectionString) </td>
-                        </tr>
-                        <tr>
-                            <td>@*@Html.EditorFor(m => m.BackgroundImg, new { @type="file" })*@
-                                <input type="file" name="BackgroundImgage" value="" />
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <button type="submit">Zapisz</button>
-                            </td>
-                        </tr>
-                    </table>
-                }
+<div class="wycentrujWertykalnie">
+    <div id="OpcjeWindowKontener">
+        <div id="OpcjeWindowZawartosc">
+            @using (@Html.BeginForm("ZapiszOpcje", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div>
 
-            </div>
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#DbConfig" aria-controls="DbConfig" role="tab" data-toggle="tab">Baza danych</a></li>
+                        <li role="presentation"><a href="#Tlo" aria-controls="Tlo" role="tab" data-toggle="tab">Ust. tła</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content" style="margin: 30px 0;">
+                        <div role="tabpanel" class="tab-pane active" id="DbConfig">
+                            <table>
+                                <tr>
+                                    <td>@Html.LabelFor(m => m.DatabaseConnString.UserID) </td>
+                                    <td>@Html.EditorFor(m => m.DatabaseConnString.UserID) </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.LabelFor(m => m.DatabaseConnString.Password) </td>
+                                    <td>@Html.EditorFor(m => m.DatabaseConnString.Password) </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.LabelFor(m => m.DatabaseConnString.DataSource) </td>
+                                    <td>@Html.EditorFor(m => m.DatabaseConnString.DataSource) </td>
+                            </table>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="Tlo">
+                                <table>
+                                    <tr>
+                                        <td>@Html.LabelFor(m => m.BackgroundColor)</td>
+                                        <td>#@Html.TextBoxFor(m => m.BackgroundColor, new { @class = "jscolor" }) </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>@Html.LabelFor(m => m.BackgroundImg)</td>
+                                        <td>@Html.TextBoxFor(m => m.BackgroundImg, new { @type = "file" })</td>
+                                    </tr>
+                                    <tr>
+                                        <td>@Html.LabelFor(m => m.BackgroundImgOpacity)</td>
+                                        <td>@Html.TextBoxFor(m => m.BackgroundImgOpacity, new { @type = "number", @min=0, @max=100 })%</td>
+                                    </tr>
+                                </table>
+                        </div>
+                    </div>
+                    <button type="submit">Zapisz</button>
+                </div>
+            }
         </div>
     </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $('#myTabs a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        })
+    </script>
+
+}
 

@@ -12,7 +12,9 @@ namespace Poczekalniav1.Models
         [Display(Name = "Kolor tła")]
         public string BackgroundColor { get; set; }
         [Display(Name = "Obrazek tła")]
-        public HttpPostedFileBase BackgroundImg { get; set; }
+        public string BackgroundImg { get; set; }
+        [Display(Name = "Przeźroczystość tła")]
+        public short BackgroundImgOpacity { get; set; }
     }
 
     public class DbConnString

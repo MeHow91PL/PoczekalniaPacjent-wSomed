@@ -3,13 +3,17 @@
 }
 
 body {
-    background: #e5e5e5;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     height: 100%;
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
+    height: 100%;
+    background: #e5e5e5;
+}
+
+.body-bgimage {
     height: 100%;
     background-image: url(Images/medikor-logo.png);
     background-repeat: no-repeat;
@@ -18,12 +22,13 @@ body {
     opacity: 0.5
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
+
+    /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
 */
-.dl-horizontal dt {
-    white-space: normal;
-}
+    .dl-horizontal dt {
+        white-space: normal;
+    }
 
 /* Set width on the form input elements since they're 100% wide by default */
 input,
@@ -31,34 +36,54 @@ select,
 textarea {
     max-width: 280px;
 }
+table tr td{
+    vertical-align:0;
+    line-height:0;
+    padding:5px;
+}
 
-.wycentrujWertykalnie {
-    background-color: rgba(0,0,0,0.8);
+table tr td label{
+    line-height:0;
+}
+
+
+#OpcjeWindow{
+    z-index:999;
+    position:relative;
 }
 
 #OpcjeWindowKontener {
     background-color: white;
-    box-shadow: rgba(0,0,0,0.8) 0px 0px 10px 5px;
+    box-shadow: rgba(0,0,0,0.7) 0px 0px 10px 1px;
     border-radius: 10px;
 }
 
 #OpcjeWindowZawartosc {
-    padding: 30px;
+    padding: 10px 30px;
 }
 
 
 
 @keyframes animacjaNumerka {
     0% {
-        background: linear-gradient(to bottom, #0c366b 0,#144e98 100%);
+        -moz-filter: brightness(2);
+        -ms-filter: brightness(2);
+        -webkit-filter: brightness(2);
+        filter: brightness(2);
     }
 
     50% {
-        background: linear-gradient(to bottom, #144e98 0,#4d7ab2 100%);
+        -moz-filter: brightness(1);
+        -ms-filter: brightness(1);
+        -webkit-filter: brightness(1);
+        filter: brightness(1);
     }
 
     100% {
-        background: linear-gradient(to bottom, #0c366b 0,#144e98 100%);
+        -moz-filter: brightness(2);
+        -ms-filter: brightness(2);
+        -webkit-filter: brightness(2);
+        filter: brightness(2);
     }
 }
 
@@ -74,7 +99,7 @@ textarea {
     font-size: 100pt;
     animation-name: animacjaNumerka;
     animation-duration: 700ms;
-    animation-iteration-count: 130;
+    animation-iteration-count: 10;
 }
 
 .wycentrujWertykalnie {
@@ -86,6 +111,7 @@ textarea {
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color:rgba(0,0,0,0.7);
 }
 
 .kafelekNumerka {

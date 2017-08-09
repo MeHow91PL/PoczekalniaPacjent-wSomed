@@ -8,10 +8,11 @@
   </DatabaseConfiguration>-->
   <UserConfig>
     <BackgroundImage>
-      <Url></Url>
+      <FileName>medikor-logo_70757_h500.png</FileName>
+      <Opacity>50</Opacity>
     </BackgroundImage>
     <BackgroundColor>
-      <Color>#eeeecc</Color>
+      <Color>#F1F1F1</Color>
     </BackgroundColor>
   </UserConfig>
 </Configuration>

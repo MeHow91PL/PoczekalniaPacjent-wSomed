@@ -659,7 +659,7 @@ window.Modernizr = (function( window, document, undefined ) {
               prefixes.join(str3 + str1)).slice(0, -str1.length)
         );
 
-        return contains(mStyle.backgroundImage, 'gradient');
+        return contains(mStyle.BackgroundImageDirectPath, 'gradient');
     };
 
 
