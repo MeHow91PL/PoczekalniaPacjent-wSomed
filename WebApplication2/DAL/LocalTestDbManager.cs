@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Poczekalniav1.DAL;
 using Poczekalniav1.Models;
@@ -7,23 +8,19 @@ namespace Poczekalniav1.DAL
 {
     internal class LocalTestDbManager : DbManager
     {
-        static List<ProszonyPacjentModel> testowaLista = new List<ProszonyPacjentModel>
-        {
-            //new ProszonyPacjentModel{ GABINET_NAZWA = "Gabinet 20", NUMER_DZIENNY = 1},
-            //new ProszonyPacjentModel{ GABINET_NAZWA = "Gabinet 21", NUMER_DZIENNY = 2},
-            new ProszonyPacjentModel{ GABINET_NAZWA = "Gabinet 20", NUMER_DZIENNY = 3}
-        };
+        static  List<ProszonyPacjentModel> testowaLista = new List<ProszonyPacjentModel>();
 
         public override int IloscProszonychPacjentow
         {
             get { return testowaLista.Count; }
         }
 
-        private Queue<ProszonyPacjentModel> _kolejkaWezwan = new Queue<ProszonyPacjentModel>();
+        private Queue<ProszonyPacjentModel> _kolejkaWezwan ;
         public override Queue<ProszonyPacjentModel> KolejkaWezwan
         {
             get
             {
+                _kolejkaWezwan = new Queue<ProszonyPacjentModel>();
                 if (IloscProszonychPacjentow > 0)
                 {
                     foreach (var item in PobierzProszonychPacjentow())
@@ -33,6 +30,16 @@ namespace Poczekalniav1.DAL
                 }
                 return _kolejkaWezwan;
             }
+        }
+
+        public void WezwijPacjenta(int nr, string nazw)
+        {
+            testowaLista.Add(new ProszonyPacjentModel { GABINET_NAZWA = nazw, NUMER_DZIENNY = nr });
+        }
+
+        public void ObsluzPacjenta(int nr)
+        {
+            testowaLista.Remove(testowaLista.Find(p => p.NUMER_DZIENNY == nr));
         }
 
         public override void PodlaczDoBazy()
@@ -51,7 +58,8 @@ namespace Poczekalniav1.DAL
 
         public override List<ProszonyPacjentModel> PobierzProszonychPacjentow()
         {
-            return testowaLista;
+            List<ProszonyPacjentModel> t = testowaLista.FindAll(p => true);
+            return t;
         }
 
         public override List<ProszonyPacjentModel> PobierzProszonychPacjentow(int idPoczekalni)

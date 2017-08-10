@@ -183,8 +183,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\TestHub.cs" />
+    <Compile Include="Infrastructure\ChangedDbEventArgs.cs" />
     <Compile Include="Infrastructure\OpcjeManager.cs" />
     <Compile Include="Infrastructure\Statics.cs" />
+    <Compile Include="Infrastructure\WyswietlaczManager.cs" />
     <Compile Include="Models\OpcjeModel.cs" />
     <Compile Include="Models\ProszonyPacjentModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

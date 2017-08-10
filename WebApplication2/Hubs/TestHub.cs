@@ -13,6 +13,14 @@ namespace Poczekalniav1.Hubs
         public void Send(ProszonyPacjentModel pac)
         {
             Clients.All.wyswietlNumerek(pac);
+            Clients.All.ukryjNr(pac);
         }
+
+        public void AktuListeNr(TimeSpan list)
+        {
+            Clients.All.aktuListeNr(list);
+        }
+
+
     }
 }
