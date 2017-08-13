@@ -11,35 +11,65 @@
 .body-bgimage {
     background-image: url(../../Content/Images/@Model.BackgroundImg);
     opacity: calc(@Model.BackgroundImgOpacity/100);
+    @if (!Model.OnlyWithNumberQueue)
+    {
+            @Html.Raw("filter: blur("+ Model.BackgroundBlur + "px);");
+        }
 }
 
+#kolejka-header {
+    background: linear-gradient(to bottom, @Model.KolejkaWezwanych.Header.ColorFrom 0,@Model.KolejkaWezwanych.Header.ColorTo 100%);
+    font-size: @string.Concat(Model.KolejkaWezwanych.Header.Font.FontSize, "px");
+}
 
+.mini-numer-kontener {
+    background: linear-gradient(to bottom, @Model.KolejkaWezwanych.NumberColorFrom 0,@Model.KolejkaWezwanych.NumberColorTo 100%);
+}
+
+.mini-numer-numerPacjenta{
+    font-size: @string.Concat(Model.KolejkaWezwanych.NumerPacjentaFontSize, "px");
+}
+
+.mini-numer-nazwaGabinetu{
+    font-size: @string.Concat(Model.KolejkaWezwanych.GabinetFontSize, "px");
+}
     </style>
 }
 
-<div style="position:fixed; z-index:9999; top:0; ">
-    Numer: <input type="number" name="numer" id="numer" value="" />
-    Gabinet: <input type="text" name="gabinet" id="gabinet" value="" />
-    <button onclick="WezwijPacjenta()">Wezwij</button>
-    <button onclick="ObsluzPacj()">Obsluz</button>
+@*<div style="position:fixed; z-index:9999; top:0; ">
+        Numer: <input type="number" name="numer" id="numer" value="" />
+        Gabinet: <input type="text" name="gabinet" id="gabinet" value="" />
+        <button onclick="WezwijPacjenta()">Wezwij</button>
+        <button onclick="ObsluzPacj()">Obsluz</button>
+    </div>*@
+<div class="body-content">
+    <div class="body-bgimage"></div>
+    <div id="layoutContainer">
+        <div style="background:black;color:white;" id="ticks"></div>
+        @{ if (Model.WezwaniPacjenci)
+            {
+                <div id="kolejka-container"></div>
+                @*<div id="KolejkaWzywanychPacjentow">
+                        <div id="kolejka-header">
+                            Kolejka do wezwania:
+                        </div>
+                        <div id="kolejka">
+                            <div class="mini-numer-kontener">
+                                <div class="mini-numer-zawartosc">
+                                    <div class="mini-numer-numerPacjenta">Numer: 20</div>
+                                    <div class="mini-numer-nazwaGabinetu">Gabinet: NFZ Ginekolog</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+            }}
+    </div>
 </div>
 
 <div id="OpcjeWindow" style="display:none">
+    <div class="rozmazaneTlo"></div>
     @Html.Partial("OknoOpcji")
 </div>
-
-
-<div id="listaWezwan"></div>
-Aktualnie do wezwani:
-<div id="AtuWezwani"></div>
-W kolejce do wezawania:
-<div id="Wkolejce"></div>
-
-Client:
-<div id="klient"></div>
-
-
-
 
 <div id="numerek" style="display:none">
     <div class="kontenerKafelka">
@@ -62,65 +92,107 @@ Client:
     <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
     <script src="~/signalr/hubs"></script>
     <script>
+        //function WezwijPacjenta() {
+        //    $.ajax({
+        //        url: "/Home/WezwijPacjenta",
+        //        data: {
+        //            numer: $("#numer").val(),
+        //            gabinet: $("#gabinet").val()
+        //        }
+        //    })
+        //};
 
-        function WezwijPacjenta() {
-            $.ajax({
-                url: "/Home/WezwijPacjenta",
-                data: {
-                    numer: $("#numer").val(),
-                    gabinet: $("#gabinet").val()
-                }
-            })
-        };
-
-        function ObsluzPacj() {
-            $.ajax({
-                url: "/Home/ObsluzPacjenta",
-                data: {
-                    numer: $("#numer").val()
-                }
-            })
-        };
-
-
-
-    //var inter = setInterval(ttt, 2000);
-    var licznik = 0;
-        var czyPobrany = "True";
+        //function ObsluzPacj() {
+        //    $.ajax({
+        //        url: "/Home/ObsluzPacjenta",
+        //        data: {
+        //            numer: $("#numer").val()
+        //        }
+        //    })
+        //};
 
         $(function () {
-            $.connection.hub.start();
+            $.connection.hub.start().done(function () {
+                clientHub.server.podlaczonoNowegoklienta($.connection.hub.id);
+            });
             var clientHub = $.connection.testHub;
 
-            clientHub.client.wyswietlNr = function (message) {
+
+            clientHub.client.aktuKolejkeDoWezwania = function (wzywani, gabinety) {
+                $("#kolejka-container").html("");
+                console.log(gabinety);
+                var marginesDoOdjecia = 5 * (gabinety.length - 1);
+                var onlyTest = "@Model.OnlyWithNumberQueue";
+                if (onlyTest == "True") {
+
+                        if (wzywani.length > 0) {
+                            $(".body-bgimage").css("filter","blur(@string.Concat(Model.BackgroundBlur,"px"))")
+                        }
+                        else {
+                            $(".body-bgimage").css("filter","blur(0)")
+                        }
+                }
+
+
+                for (var i = 0; i < gabinety.length; i++) {
+                    var gabinetHeader =
+                        '<div id="KolejkaWzywanychPacjentow"> ' +
+                        '<div id="kolejka-header">' +
+                        gabinety[i].Nazwa +
+                        '</div> ' +
+                        '<div id="kolejka"> ';
+
+                    for (var j = 0; j < wzywani.length; j++) {
+                        if (wzywani[j].GABINET_ID == gabinety[i].Id) {
+                            gabinetHeader += StworzMiniKafelek(wzywani[j].NUMER_DZIENNY, wzywani[j].GABINET_NAZWA);
+                        }
+                        ///*$("#kolejka").append(*/StworzMiniKafelek(wzywani[j].NUMER_DZIENNY, wzywani[j].GABINET_NAZWA));
+                        console.log(wzywani[i]);
+                    }
+                    gabinetHeader += '</ div>';
+                    $("#kolejka-container").append(gabinetHeader);
+                }
+            }
+
+            function StworzMiniKafelek(nr, gab) {
+                var html =
+                    '<div class="mini-numer-kontener">' +
+                    '   <div class="mini-numer-zawartosc">' +
+                    '       <div class="mini-numer-numerPacjenta">Numer: ' + nr + '</div>' +
+                    '       <div class="mini-numer-nazwaGabinetu">Gabinet: ' + gab + '</div>' +
+                    '   </div>' +
+                    '</div>';
+
+                return html;
+            }
+
+            clientHub.client.tickLog = function (message) {
+                $("#ticks").append(message + "<br />");
+            }
+
+            clientHub.client.wyswietlNr = function (message, info) {
                 //console.log(message);
                 if (message != null) {
                 console.log("@DateTime.Now.TimeOfDay || Pokaz : " + message.NUMER_DZIENNY);
+                console.log(info);
                     $("#numerPacjenta").html(message.NUMER_DZIENNY);
                     $("#nazwaGabinetu").html(message.GABINET_NAZWA);
                     $("#numerek").css("display", "block");
                 }
             }
 
-            clientHub.client.ukryjNr = function (message) {
+            clientHub.client.ukryjNr = function (message,info) {
                 console.log("@DateTime.Now.TimeOfDay ||  Ukryj : " + message.NUMER_DZIENNY);
+                console.log(info);
                         $("#numerPacjenta").html("");
                         $("#nazwaGabinetu").html("");
                     $("#numerek").css("display", "none");
             }
 
             var AtuWezwani = $("#AtuWezwani");
-            //listaWezwan
-            //Wkolejce
-                //setTimeout(function () { $("#numerek").css("display", "none");}, 9000);
             clientHub.client.aktuListeNr = function (lista) {
-                AtuWezwani.append(lista + "<br />");   
+                AtuWezwani.append(lista + "<br />");
             };
-
-
-
-
-
 
         $(document).keyup(function (e) {
 
@@ -128,6 +200,7 @@ Client:
                 var opcjeWindow = $("#OpcjeWindow");
 
                 if (opcjeWindow.css("display") == "none") {
+                    $(".body-content").addClass("oknoOpcjiAktywne");
                     //$.ajax({
                     //    url: "/Home/OknoOpcji",
                     //    success: function (html) {
@@ -138,53 +211,12 @@ Client:
                    opcjeWindow.css("display", "block");
                 }
                 else {
+                    $(".body-content").removeClass("oknoOpcjiAktywne");
+
                     opcjeWindow.css("display", "none");
                 }
             }
         });
     });
-
-    function ttt() {
-        //console.log("######################################################################");
-        //console.log("Interval nr " + licznik++);
-        clearInterval(inter);
-
-        $.ajax({
-            url: "/Home/WyswietlNumerek",
-            success: function (html) {
-                $("#numerek").html(html);
-            },
-        });
-
-        $.ajax({
-            url: "/Home/GetDbInfo",
-            success: function (html) {
-                @*console.log("------------------------------- DbInfo ------------------------------");
-                console.log("@DateTime.Now.TimeOfDay" + " || DataSource: " + html.DataSource);
-                console.log("@DateTime.Now.TimeOfDay" + " || Connstring " + html.ConnString);
-                console.log("------------------------------- End DbInfo ------------------------------");*@
-            },
-        });
-
-        $.ajax({
-            url: "/Home/CzyPobrany",
-            success: function (html) {
-                czyPobrany = html;
-                //console.log("html = " + czyPobrany);
-                //console.log("html type = " + typeof (czyPobrany));
-
-                //console.log("czyPobrany = " + czyPobrany);
-                //console.log("czyPobrany type = " + typeof (czyPobrany));
-
-                if (czyPobrany == "True") {
-                    console.log("TimeOut");
-                    setTimeout(function () { inter = setInterval(ttt, 2000); console.log("After TimeOut"); }, 15000);
-                }
-                else {
-                    inter = setInterval(ttt, 2000);
-                }
-            },
-        });
-    }
     </script>
 }

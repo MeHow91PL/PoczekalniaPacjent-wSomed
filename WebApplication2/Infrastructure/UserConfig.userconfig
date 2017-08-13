@@ -8,11 +8,37 @@
   </DatabaseConfiguration>-->
   <UserConfig>
     <BackgroundImage>
-      <FileName>medikor-logo_70757_h500.png</FileName>
-      <Opacity>100</Opacity>
+      <FileName>medikor-logo.png</FileName>
+      <Opacity>15</Opacity>
     </BackgroundImage>
     <BackgroundColor>
-      <Color>#F1F1F1</Color>
+      <Color>#E4E4E4</Color>
     </BackgroundColor>
+    <BackgroundBlur>0</BackgroundBlur>
+    <OnlyWithNumberQueue>True</OnlyWithNumberQueue>
+    <WezwaniPacjenci>True</WezwaniPacjenci>
+    <KolejkaWezwan>
+      <Header>
+        <ColorFrom>#221BA4</ColorFrom>
+        <ColorTo>#352AFF</ColorTo>
+        <Height>0</Height>
+        <Font>
+          <Size>24</Size>
+        </Font>
+        <HasShadow>True</HasShadow>
+        <BoxShadow>
+          <HorizontalOffset>0</HorizontalOffset>
+          <VerticalOffset>0</VerticalOffset>
+          <Blur>10</Blur>
+          <Spread>0</Spread>
+          <!--[Display(Name = "Kolor")]
+        public Color Color { get; set; }-->
+        </BoxShadow>
+      </Header>
+      <NumberColorFrom>#745CCA</NumberColorFrom>
+      <NumberColorTo>#633ACA</NumberColorTo>
+      <NumerPacjentaFontSize>50</NumerPacjentaFontSize>
+      <GabinetFontSize>20</GabinetFontSize>
+    </KolejkaWezwan>
   </UserConfig>
 </Configuration>

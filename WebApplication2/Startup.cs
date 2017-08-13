@@ -1,5 +1,6 @@
 ﻿using Microsoft.Owin;
 using Owin;
+using Poczekalniav1.Infrastructure;
 
 [assembly: OwinStartupAttribute(typeof(Poczekalniav1.Startup))]
 namespace Poczekalniav1
@@ -9,6 +10,8 @@ namespace Poczekalniav1
         public void Configuration(IAppBuilder appBuilder)
         {
             appBuilder.MapSignalR();
+            NasluchBazy nasluch = new NasluchBazy();
+            nasluch.initApp();
         }
     }
 }

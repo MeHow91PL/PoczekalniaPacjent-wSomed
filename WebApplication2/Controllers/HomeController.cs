@@ -17,9 +17,9 @@ namespace Poczekalniav1.Controllers
 {
     public class HomeController : Controller
     {
-        //OracleDbManager db = new OracleDbManager();
-        LocalTestDbManager db = new LocalTestDbManager();
-
+        OracleDbManager db = new OracleDbManager();
+        //LocalTestDbManager db = new LocalTestDbManager();
+        IHubContext context = GlobalHost.ConnectionManager.GetHubContext<TestHub>();
         public ActionResult Index()
         {
             try
@@ -29,90 +29,28 @@ namespace Poczekalniav1.Controllers
                 //{
                 //    OknoOpcji();
                 //}
-
                 OpcjeModel opcjeModel = OpcjeAplikacjiManager.GetOpcjeModel();
-                WyswietlaczManager wysManager = new WyswietlaczManager();
-                this.AddedNewNumber += wysManager.AddedNewNumber;
-                this.RemovedNumber += wysManager.RemovedNumber;
-                Timer timer1 = new Timer(1000);
-                timer1.Elapsed += Timer1_Elapsed;
-                timer1.Start();
-
-
                 return View(opcjeModel);
             }
             catch (Exception ex)
             {
-                throw;
+                return View("Error");
             }
         }
 
-
-
-        static List<ProszonyPacjentModel> listaWezwanych = new List<ProszonyPacjentModel>();
-        static bool czyPobrany = false;
-        static Queue<ProszonyPacjentModel> kolejkaWezwań = new Queue<ProszonyPacjentModel>();
-        IHubContext context = GlobalHost.ConnectionManager.GetHubContext<TestHub>();
-
-        public delegate void ChangedDbEventHandler(object o, ChangedDbEventArgs e);
-        public event ChangedDbEventHandler AddedNewNumber;
-        public event ChangedDbEventHandler RemovedNumber;
-
-        protected virtual void OnAddedNewNumber(ProszonyPacjentModel ZmienionyRecord)
-        {
-            if (AddedNewNumber != null)
-            {
-                AddedNewNumber(this, new ChangedDbEventArgs { ZmienionyRecord = ZmienionyRecord });
-            }
-        }
-
-        protected virtual void OnRemovedNumber(ProszonyPacjentModel ZmienionyRecord)
-        {
-            if (AddedNewNumber != null)
-            {
-                RemovedNumber(this, new ChangedDbEventArgs { ZmienionyRecord = ZmienionyRecord });
-            }
-        }
-
-        private void Timer1_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            if (db.IloscProszonychPacjentow > 0)
-            {
-                foreach (var item in db.PobierzProszonychPacjentow())
-                {
-                    if (!listaWezwanych.Any(l => l.NUMER_DZIENNY == item.NUMER_DZIENNY))
-                    {
-                        listaWezwanych.Add(item);
-                        OnAddedNewNumber(item);
-                    }
-                }
-
-                foreach (var item in listaWezwanych)
-                {
-                    if (!db.PobierzProszonychPacjentow().Any(l => l.NUMER_DZIENNY == item.NUMER_DZIENNY))
-                    {
-                        OnRemovedNumber(item);
-                    }
-                }
-            }
-            listaWezwanych = db.PobierzProszonychPacjentow().FindAll(w => listaWezwanych.Exists(l => l.NUMER_DZIENNY == w.NUMER_DZIENNY));
-        }
-
-
-
-        public void WezwijPacjenta(int numer, string gabinet)
-        {
-            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<TestHub>();
-            db.WezwijPacjenta(numer, gabinet);
-            context.Clients.All.wyswietlNumerek(db.PobierzProszonegoPacjentaPoId(numer));
-            context.Clients.All.aktuListeNr(db.PobierzProszonychPacjentow());
-        }
-        public void ObsluzPacjenta(int numer)
-        {
-            db.ObsluzPacjenta(numer);
-            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<TestHub>();
-            context.Clients.All.aktuListeNr(db.PobierzProszonychPacjentow());
-        }
+        //public void WezwijPacjenta(int numer, string gabinet)
+        //{
+        //    IHubContext context = GlobalHost.ConnectionManager.GetHubContext<TestHub>();
+        //    db.WezwijPacjenta(numer, gabinet);
+        //    context.Clients.All.wyswietlNumerek(db.PobierzProszonegoPacjentaPoId(numer));
+        //    context.Clients.All.aktuListeNr(db.PobierzProszonychPacjentow());
+        //}
+        //public void ObsluzPacjenta(int numer)
+        //{
+        //    db.ObsluzPacjenta(numer);
+        //    IHubContext context = GlobalHost.ConnectionManager.GetHubContext<TestHub>();
+        //    context.Clients.All.aktuListeNr(db.PobierzProszonychPacjentow());
+        //}
 
 
 
@@ -159,7 +97,6 @@ namespace Poczekalniav1.Controllers
             {
                 OpcjeAplikacjiManager.DatabaseConnectionString = model.DatabaseConnString.ConnectionString;
                 OpcjeAplikacjiManager.BackgroundColor = model.BackgroundColor;
-                OpcjeAplikacjiManager.BackgroundImageOpacity = model.BackgroundImgOpacity;
                 HttpPostedFileBase img = Request.Files[0];
                 if (img != null && img.ContentLength > 0)
                 {
@@ -168,6 +105,11 @@ namespace Poczekalniav1.Controllers
                     img.SaveAs(path);
                     OpcjeAplikacjiManager.BackgroundImage = img.FileName;
                 }
+                OpcjeAplikacjiManager.BackgroundImageOpacity = model.BackgroundImgOpacity;
+                OpcjeAplikacjiManager.BackgroundBlur = model.BackgroundBlur;
+                OpcjeAplikacjiManager.OnlyWithNumberQueue = model.OnlyWithNumberQueue;
+                OpcjeAplikacjiManager.WezwaniPacjenci = model.WezwaniPacjenci;
+                OpcjeAplikacjiManager.KolejkaWezwanych = model.KolejkaWezwanych;
 
                 return RedirectToAction("Index");
             }
@@ -175,17 +117,6 @@ namespace Poczekalniav1.Controllers
             {
                 return View("Error");
             }
-        }
-
-
-
-
-
-
-
-        public bool CzyPobrany()
-        {
-            return czyPobrany;
         }
     }
 }

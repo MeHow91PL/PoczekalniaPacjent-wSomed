@@ -10,11 +10,16 @@
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#DbConfig" aria-controls="DbConfig" role="tab" data-toggle="tab">Baza danych</a></li>
-                        <li role="presentation"><a href="#Tlo" aria-controls="Tlo" role="tab" data-toggle="tab">Ust. tła</a></li>
+                        <li role="presentation"><a href="#Tlo" aria-controls="Tlo" role="tab" data-toggle="tab">Tło</a></li>
+                        <li role="presentation"><a href="#Layout" aria-controls="Layout" role="tab" data-toggle="tab">Layout</a></li>
+                        @if (Model.WezwaniPacjenci)
+                        {
+                            <li role="presentation"><a href="#KolejkaWezwan" aria-controls="KolejkaWezwan" role="tab" data-toggle="tab">KolejkaWezwan</a></li>
+                        }
                     </ul>
 
                     <!-- Tab panes -->
-                    <div class="tab-content" style="margin: 30px 0;">
+                    <div class="tab-content opcjeZawartoscZakladki" style="margin: 30px 0;">
                         <div role="tabpanel" class="tab-pane active" id="DbConfig">
                             <table>
                                 <tr>
@@ -31,24 +36,107 @@
                             </table>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="Tlo">
-                                <table>
-                                    <tr>
-                                        <td>@Html.LabelFor(m => m.BackgroundColor)</td>
-                                        <td>#@Html.TextBoxFor(m => m.BackgroundColor, new { @class = "jscolor" }) </td>
-                                    </tr>
+                            <table>
+                                <tr>
+                                    <td>@Html.LabelFor(m => m.BackgroundColor)</td>
+                                    <td>#@Html.TextBoxFor(m => m.BackgroundColor, new { @class = "jscolor" }) </td>
+                                </tr>
 
+                                <tr>
+                                    <td>@Html.LabelFor(m => m.BackgroundImg)</td>
+                                    <td>@Html.TextBoxFor(m => m.BackgroundImg, new { @type = "file" })</td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.LabelFor(m => m.BackgroundImgOpacity)</td>
+                                    <td>@Html.TextBoxFor(m => m.BackgroundImgOpacity, new { @type = "number", @min = 0, @max = 100 })%</td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.LabelFor(m => m.BackgroundBlur)</td>
+                                    <td>@Html.TextBoxFor(m => m.BackgroundBlur, new { @type = "number", @min = 0, @max = 100 })px</td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.LabelFor(m => m.OnlyWithNumberQueue)</td>
+                                    <td>@Html.CheckBoxFor(m => m.OnlyWithNumberQueue)</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="Layout">
+                            <table>
+                                <tr>
+                                    <td>@Html.CheckBoxFor(m => m.WezwaniPacjenci)</td>
+                                    <td>@Html.LabelFor(m => m.WezwaniPacjenci)</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="KolejkaWezwan">
+                            <table>
+                                <tr>
+                                    <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.ColorFrom) </td>
+                                    <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.ColorFrom, new { @class = "jscolor" }) </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.ColorTo) </td>
+                                    <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.ColorTo, new { @class = "jscolor" }) </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.Font.FontSize) </td>
+                                    <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.Font.FontSize) </td>
+                                </tr>
+                                <caption>TestCap</caption>
+                                <tr>
+                                    <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.HasShadow) </td>
+                                    <td>@Html.CheckBoxFor(m => m.KolejkaWezwanych.Header.HasShadow) </td>
+                                </tr>
+                                @if (Model.KolejkaWezwanych.Header.HasShadow)
+                                {
                                     <tr>
-                                        <td>@Html.LabelFor(m => m.BackgroundImg)</td>
-                                        <td>@Html.TextBoxFor(m => m.BackgroundImg, new { @type = "file" })</td>
+                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.BoxShadow.HorizontalOffset) </td>
+                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.BoxShadow.HorizontalOffset) </td>
                                     </tr>
                                     <tr>
-                                        <td>@Html.LabelFor(m => m.BackgroundImgOpacity)</td>
-                                        <td>@Html.TextBoxFor(m => m.BackgroundImgOpacity, new { @type = "number", @min=0, @max=100 })%</td>
+                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.BoxShadow.VerticalOffset) </td>
+                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.BoxShadow.VerticalOffset) </td>
                                     </tr>
-                                </table>
+                                    <tr>
+                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.BoxShadow.Blur) </td>
+                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.BoxShadow.Blur) </td>
+                                    </tr>
+                                    <tr>
+                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.BoxShadow.Spread) </td>
+                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.BoxShadow.Spread) </td>
+                                    </tr>
+                                    <tr>
+                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.BoxShadow.Color) </td>
+                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.BoxShadow.Color) </td>
+                                    </tr>
+                                        <tr>
+                                            <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.BoxShadow.Color) </td>
+                                            <td>@Html.EditorFor(m => m.KolejkaWezwanych.Header.BoxShadow.Color) </td>
+                                        </tr>
+                                }
+                                <tr>
+                                    <td>@Html.LabelFor(m => m.KolejkaWezwanych.NumberColorFrom) </td>
+                                    <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.NumberColorFrom, new { @class = "jscolor" }) </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.LabelFor(m => m.KolejkaWezwanych.NumberColorTo) </td>
+                                    <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.NumberColorTo, new { @class = "jscolor" }) </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.LabelFor(m => m.KolejkaWezwanych.NumerPacjentaFontSize) </td>
+                                    <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.NumerPacjentaFontSize, new { @type = "number", @min = 0, @max = 100 }) </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.LabelFor(m => m.KolejkaWezwanych.GabinetFontSize) </td>
+                                    <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.GabinetFontSize, new { @type = "number", @min = 0, @max = 100 }) </td>
+                                </tr>
+
+                            </table>
                         </div>
                     </div>
-                    <button type="submit">Zapisz</button>
+                    <div id="subBtnContainer" style="bottom:20px;position:relative;">
+                        <button type="submit">Zapisz</button>
+                    </div>
                 </div>
             }
         </div>

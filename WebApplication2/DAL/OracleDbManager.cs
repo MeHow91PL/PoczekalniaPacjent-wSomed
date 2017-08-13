@@ -13,7 +13,7 @@ namespace Poczekalniav1.DAL
     public class OracleDbManager : DbManager
     {
         private string connString = OpcjeAplikacjiManager.DatabaseConnectionString;
-        OracDbContext db = new OracDbContext();
+        static OracDbContext bd1 = new OracDbContext();
 
         //public DbInfo GetDbInfo()
         //{
@@ -25,7 +25,7 @@ namespace Poczekalniav1.DAL
         //"User Id=gabinet;Password=Kam$oft1;Data Source=localhost"
         public override void PodlaczDoBazy()
         {
-            db.Database.Connection.ConnectionString = OpcjeAplikacjiManager.DatabaseConnectionString;
+            bd1.Database.Connection.ConnectionString = OpcjeAplikacjiManager.DatabaseConnectionString;
             if (!PolaczonoZBaza)
             {
                 throw new Exception("Nie udało się nawiązać połączenia z bazą danych! /n" +
@@ -39,8 +39,8 @@ namespace Poczekalniav1.DAL
             {
                 try
                 {
-                    db.Database.Connection.Open();
-                    db.Database.Connection.Close();
+                    bd1.Database.Connection.Open();
+                    bd1.Database.Connection.Close();
                     return true;
                 }
                 catch (Exception) { return false; }
@@ -76,10 +76,13 @@ namespace Poczekalniav1.DAL
 
         public override List<ProszonyPacjentModel> PobierzProszonychPacjentow()
         {
-            List<ProszonyPacjentModel> t =
-                    db.Database.SqlQuery<ProszonyPacjentModel>("SELECT GABINET_ID, GABINET_NAZWA, GABINET_NUMER, NUMER_DZIENNY " +
-                        "from PROSZENI_PACJENCI").ToList();
-            return t;
+            using (OracDbContext db = new OracDbContext())
+            {
+                List<ProszonyPacjentModel> t =
+                        db.Database.SqlQuery<ProszonyPacjentModel>("SELECT GABINET_ID, GABINET_NAZWA, GABINET_NUMER, NUMER_DZIENNY " +
+                            "from PROSZENI_PACJENCI").ToList();
+                return t;
+            }
         }
 
         public override List<ProszonyPacjentModel> PobierzProszonychPacjentow(int idPoczekalni)
