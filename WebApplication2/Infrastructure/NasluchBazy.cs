@@ -11,8 +11,13 @@ namespace Poczekalniav1.Infrastructure
 {
     public class NasluchBazy
     {
-        public void initApp()
+        List<ProszonyPacjentModel> listaWezwanych = new List<ProszonyPacjentModel>();
+        static Queue<ProszonyPacjentModel> kolejkaWezwań = new Queue<ProszonyPacjentModel>();
+        IHubContext context = GlobalHost.ConnectionManager.GetHubContext<TestHub>();
+
+        public void initApp(List<ProszonyPacjentModel> listaWezwanych)
         {
+            this.listaWezwanych = listaWezwanych;
             WyswietlaczManager wysManager = new WyswietlaczManager();
             this.AddedNewNumber += wysManager.AddedNewNumber;
             this.RemovedNumber += wysManager.RemovedNumber;
@@ -21,11 +26,6 @@ namespace Poczekalniav1.Infrastructure
             timer1.Elapsed += Timer1_Elapsed;
             timer1.Start();
         }
-
-
-        static List<ProszonyPacjentModel> listaWezwanych = new List<ProszonyPacjentModel>();
-        static Queue<ProszonyPacjentModel> kolejkaWezwań = new Queue<ProszonyPacjentModel>();
-        IHubContext context = GlobalHost.ConnectionManager.GetHubContext<TestHub>();
 
         public delegate void ChangedDbEventHandler(object o, ChangedDbEventArgs e);
         public event ChangedDbEventHandler AddedNewNumber;

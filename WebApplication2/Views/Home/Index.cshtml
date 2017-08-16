@@ -1,4 +1,5 @@
-﻿@model Poczekalniav1.Models.OpcjeModel
+﻿@using System.Drawing
+@model Poczekalniav1.Models.OpcjeModel
 @{
     ViewBag.Title = "Home Page";
 }
@@ -17,21 +18,35 @@
         }
 }
 
-#kolejka-header {
+        @{
+            Color headerShadowCol = Color.FromArgb(Model.KolejkaWezwanych.Header.BoxShadow.ColorAlpha, ColorTranslator.FromHtml(Model.KolejkaWezwanych.Header.BoxShadow.Color));
+            string headerShadowAlpha =  ((decimal)headerShadowCol.A / 100).ToString().Replace(',','.') ;
+            Color numShadowCol = Color.FromArgb(Model.KolejkaWezwanych.Numerek.BoxShadow.ColorAlpha, ColorTranslator.FromHtml(Model.KolejkaWezwanych.Numerek.BoxShadow.Color));
+            string numShadowAlpha =  ((decimal)numShadowCol.A / 100).ToString().Replace(',','.') ;
+        }
+
+.kolejka-header {
     background: linear-gradient(to bottom, @Model.KolejkaWezwanych.Header.ColorFrom 0,@Model.KolejkaWezwanych.Header.ColorTo 100%);
     font-size: @string.Concat(Model.KolejkaWezwanych.Header.Font.FontSize, "px");
+    -moz-box-shadow: @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.HorizontalOffset,"px") @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.VerticalOffset, "px") @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.Blur, "px") @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.Spread, "px") rgba(@headerShadowCol.R, @headerShadowCol.G,@headerShadowCol.B, @headerShadowAlpha);
+    -webkit-box-shadow: @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.HorizontalOffset,"px") @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.VerticalOffset, "px") @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.Blur, "px") @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.Spread, "px") rgba(@headerShadowCol.R, @headerShadowCol.G,@headerShadowCol.B,@headerShadowAlpha);
+    box-shadow: @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.HorizontalOffset,"px") @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.VerticalOffset, "px") @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.Blur, "px") @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.Spread, "px") rgba(@headerShadowCol.R, @headerShadowCol.G,@headerShadowCol.B,@headerShadowAlpha);
 }
 
 .mini-numer-kontener {
-    background: linear-gradient(to bottom, @Model.KolejkaWezwanych.NumberColorFrom 0,@Model.KolejkaWezwanych.NumberColorTo 100%);
+    background: linear-gradient(to bottom, @Model.KolejkaWezwanych.Numerek.ColorFrom 0,@Model.KolejkaWezwanych.Numerek.ColorTo 100%);
+    -moz-box-shadow: @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.HorizontalOffset,"px") @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.VerticalOffset, "px") @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.Blur, "px") @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.Spread, "px") rgba(@numShadowCol.R, @numShadowCol.G,@numShadowCol.B, @numShadowAlpha );
+    -webkit-box-shadow: @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.HorizontalOffset,"px") @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.VerticalOffset, "px") @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.Blur, "px") @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.Spread, "px") rgba(@numShadowCol.R, @numShadowCol.G,@numShadowCol.B,@numShadowAlpha );
+    box-shadow: @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.HorizontalOffset,"px") @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.VerticalOffset, "px") @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.Blur, "px") @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.Spread, "px") rgba(@numShadowCol.R, @numShadowCol.G,@numShadowCol.B,@numShadowAlpha );
 }
 
+
 .mini-numer-numerPacjenta{
-    font-size: @string.Concat(Model.KolejkaWezwanych.NumerPacjentaFontSize, "px");
+    font-size: @string.Concat(Model.KolejkaWezwanych.Numerek.NumerPacjentaFont.FontSize, "px");
 }
 
 .mini-numer-nazwaGabinetu{
-    font-size: @string.Concat(Model.KolejkaWezwanych.GabinetFontSize, "px");
+    font-size: @string.Concat(Model.KolejkaWezwanych.Numerek.GabinetFont.FontSize, "px");
 }
     </style>
 }
@@ -72,6 +87,7 @@
 </div>
 
 <div id="numerek" style="display:none">
+
     <div class="kontenerKafelka">
         <div class="wycentrujWertykalnie">
             <div class="kafelekNumerka">
@@ -86,31 +102,15 @@
     </div>
 </div>
 
-
+<audio audio preload="auto" autobuffer id="dzwiek">
+    <source src="~/Content/Sounds/@Model.SummonSound" type="audio/mpeg" />
+</audio>
 <footer></footer>
 @section scripts{
     <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
     <script src="~/signalr/hubs"></script>
     <script>
-        //function WezwijPacjenta() {
-        //    $.ajax({
-        //        url: "/Home/WezwijPacjenta",
-        //        data: {
-        //            numer: $("#numer").val(),
-        //            gabinet: $("#gabinet").val()
-        //        }
-        //    })
-        //};
-
-        //function ObsluzPacj() {
-        //    $.ajax({
-        //        url: "/Home/ObsluzPacjenta",
-        //        data: {
-        //            numer: $("#numer").val()
-        //        }
-        //    })
-        //};
-
+            var dzwiek = document.getElementById("dzwiek");
         $(function () {
             $.connection.hub.start().done(function () {
                 clientHub.server.podlaczonoNowegoklienta($.connection.hub.id);
@@ -122,22 +122,22 @@
                 $("#kolejka-container").html("");
                 console.log(gabinety);
                 var marginesDoOdjecia = 5 * (gabinety.length - 1);
-                var onlyTest = "@Model.OnlyWithNumberQueue";
-                if (onlyTest == "True") {
 
-                        if (wzywani.length > 0) {
-                            $(".body-bgimage").css("filter","blur(@string.Concat(Model.BackgroundBlur,"px"))")
-                        }
-                        else {
-                            $(".body-bgimage").css("filter","blur(0)")
-                        }
-                }
-
+                 var onlyTest = "@Model.OnlyWithNumberQueue";
+                var queueIsActive = "@Model.WezwaniPacjenci";
+                if (onlyTest == "True" && queueIsActive == "True") {
+                    if (wzywani.length > 0) {
+                        $(".body-bgimage").css("filter","blur(@string.Concat(Model.BackgroundBlur,"px"))")
+                    }
+                    else {
+                        $(".body-bgimage").css("filter","blur(0)")
+                    }
+                };
 
                 for (var i = 0; i < gabinety.length; i++) {
                     var gabinetHeader =
                         '<div id="KolejkaWzywanychPacjentow"> ' +
-                        '<div id="kolejka-header">' +
+                        '<div class="kolejka-header">' +
                         gabinety[i].Nazwa +
                         '</div> ' +
                         '<div id="kolejka"> ';
@@ -152,7 +152,7 @@
                     gabinetHeader += '</ div>';
                     $("#kolejka-container").append(gabinetHeader);
                 }
-            }
+            };
 
             function StworzMiniKafelek(nr, gab) {
                 var html =
@@ -164,35 +164,60 @@
                     '</div>';
 
                 return html;
-            }
+            };
 
             clientHub.client.tickLog = function (message) {
                 $("#ticks").append(message + "<br />");
-            }
+            };
 
             clientHub.client.wyswietlNr = function (message, info) {
                 //console.log(message);
                 if (message != null) {
-                console.log("@DateTime.Now.TimeOfDay || Pokaz : " + message.NUMER_DZIENNY);
-                console.log(info);
+                    console.log("@DateTime.Now.TimeOfDay || Pokaz : " + message.NUMER_DZIENNY);
+                    console.log(info);
+                    dzwiek.play();
                     $("#numerPacjenta").html(message.NUMER_DZIENNY);
                     $("#nazwaGabinetu").html(message.GABINET_NAZWA);
                     $("#numerek").css("display", "block");
                 }
-            }
+            };
 
-            clientHub.client.ukryjNr = function (message,info) {
+            clientHub.client.ukryjNr = function (message, info) {
                 console.log("@DateTime.Now.TimeOfDay ||  Ukryj : " + message.NUMER_DZIENNY);
                 console.log(info);
-                        $("#numerPacjenta").html("");
-                        $("#nazwaGabinetu").html("");
-                    $("#numerek").css("display", "none");
-            }
+                dzwiek.pause();
+                dzwiek.load();
+                $("#numerPacjenta").html("");
+                $("#nazwaGabinetu").html("");
+                $("#numerek").css("display", "none");
+            };
 
             var AtuWezwani = $("#AtuWezwani");
             clientHub.client.aktuListeNr = function (lista) {
                 AtuWezwani.append(lista + "<br />");
             };
+
+
+
+            $('#KolejkaWezwanych_Header_HasShadow').change(function (e) {
+                e.preventDefault()
+                if (e.currentTarget.checked == true) {
+                    $(".OpcjeHeaderBoxShadowOption").css("display", "table-row-group");
+                }
+                else {
+                    $(".OpcjeHeaderBoxShadowOption").css("display", "none");
+                }
+            });
+
+            $('#KolejkaWezwanych_Numerek_HasShadow').change(function (e) {
+                e.preventDefault()
+                if (e.currentTarget.checked == true) {
+                    $(".OpcjeNumBoxShadowOption").css("display", "table-row-group");
+                }
+                else {
+                    $(".OpcjeNumBoxShadowOption").css("display", "none");
+                }
+            });
 
         $(document).keyup(function (e) {
 
@@ -201,18 +226,10 @@
 
                 if (opcjeWindow.css("display") == "none") {
                     $(".body-content").addClass("oknoOpcjiAktywne");
-                    //$.ajax({
-                    //    url: "/Home/OknoOpcji",
-                    //    success: function (html) {
-                    //        opcjeWindow.html(html);
-                    //       opcjeWindow.css("display", "block");
-                    //    },
-                    //});
                    opcjeWindow.css("display", "block");
                 }
                 else {
                     $(".body-content").removeClass("oknoOpcjiAktywne");
-
                     opcjeWindow.css("display", "none");
                 }
             }

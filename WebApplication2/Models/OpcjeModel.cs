@@ -24,6 +24,10 @@ namespace Poczekalniav1.Models
         public bool OnlyWithNumberQueue { get; set; }
         [Display(Name = "Rozmazanie tła")]
         public short BackgroundBlur { get; set; }
+        [Display(Name = "Dzwięk włączony")]
+        public bool IsSummonSound { get; set; }
+        [Display(Name = "Dzwięk wezwania")]
+        public string SummonSound { get; set; }
         #endregion
 
         #region Opcje layoutu
@@ -79,21 +83,8 @@ namespace Poczekalniav1.Models
     public class KolejkaWezwanych
     {
         [Display(Name = "Nagłówek")]
-        public Kafelek Header { get; set; }
-
-        #region Numerek
-        [Display(Name = "Kolor numerku od"), StringLength(6, ErrorMessage = "Zły format koloru!")]
-        public string NumberColorFrom { get; set; }
-
-        [Display(Name = "Kolor numerku do"), StringLength(6, ErrorMessage = "Zły format koloru!")]
-        public string NumberColorTo { get; set; }
-
-        [Display(Name = "Rozmiar czcionki numerku")]
-        public byte NumerPacjentaFontSize { get; set; }
-
-        [Display(Name = "Rozmiar czcionki nazwy gabinetu")]
-        public byte GabinetFontSize { get; set; }
-        #endregion
+        public KafelekNaglowka Header { get; set; }
+        public KafelekNumerka Numerek { get; set; }
     }
 
     public class Kafelek
@@ -102,14 +93,27 @@ namespace Poczekalniav1.Models
         public string ColorFrom { get; set; }
         [Display(Name = "Kolor do"), StringLength(6, ErrorMessage = "Zły format koloru!")]
         public string ColorTo { get; set; }
-        [Display(Name = "Czcionka")]
-        public Font Font { get; set; }
         [Display(Name = "Wysykość"), Range(10, 100, ErrorMessage = "Wysykość musi mieścić się w zakresie 10-100")]
         public byte Height { get; set; }
         [Display(Name = "Włączyć cień")]
         public bool HasShadow { get; set; }
         [Display(Name = "Ust. cienia")]
         public BoxShadow BoxShadow { get; set; }
+    }
+
+    public class KafelekNaglowka : Kafelek
+    {
+        [Display(Name = "Czcionka")]
+        public Font Font { get; set; }
+    }
+
+    public class KafelekNumerka : Kafelek
+    {
+        [Display(Name = "Numer rozm.")]
+        public Font NumerPacjentaFont { get; set; }
+
+        [Display(Name = "Gabinet rozm.")]
+        public Font GabinetFont { get; set; }
     }
 
     public class Font
@@ -128,7 +132,9 @@ namespace Poczekalniav1.Models
         public byte Blur { get; set; }
         [Display(Name = "Rozszerzenie")]
         public byte Spread { get; set; }
-        [Display(Name = "Kolor")]
-        public Color Color { get; set; }
+        [Display(Name = "Kolor cienia")]
+        public string Color { get; set; }
+        [Display(Name ="Krycie cienia"), Range(1, 100 , ErrorMessage = "Wartość musi być z zakresu 1-100")]
+        public byte ColorAlpha { get; set; }
     }
 }

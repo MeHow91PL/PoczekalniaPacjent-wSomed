@@ -97,16 +97,13 @@ namespace Poczekalniav1.Controllers
             {
                 OpcjeAplikacjiManager.DatabaseConnectionString = model.DatabaseConnString.ConnectionString;
                 OpcjeAplikacjiManager.BackgroundColor = model.BackgroundColor;
-                HttpPostedFileBase img = Request.Files[0];
-                if (img != null && img.ContentLength > 0)
-                {
-                    string path = Path.Combine(Server.MapPath("~/Content/Images"),
-                                               Path.GetFileName(img.FileName));
-                    img.SaveAs(path);
-                    OpcjeAplikacjiManager.BackgroundImage = img.FileName;
-                }
+                OpcjeAplikacjiManager.BackgroundImage = model.BackgroundImg ?? OpcjeAplikacjiManager.BackgroundImage;
+                UploadFile("BackgroundImg", "Content/Images");
                 OpcjeAplikacjiManager.BackgroundImageOpacity = model.BackgroundImgOpacity;
                 OpcjeAplikacjiManager.BackgroundBlur = model.BackgroundBlur;
+                OpcjeAplikacjiManager.IsSummonSound = model.IsSummonSound;
+                OpcjeAplikacjiManager.SummonSound = model.SummonSound ?? OpcjeAplikacjiManager.SummonSound;
+                UploadFile("SummonSound", "Content/Sounds");
                 OpcjeAplikacjiManager.OnlyWithNumberQueue = model.OnlyWithNumberQueue;
                 OpcjeAplikacjiManager.WezwaniPacjenci = model.WezwaniPacjenci;
                 OpcjeAplikacjiManager.KolejkaWezwanych = model.KolejkaWezwanych;
@@ -115,8 +112,33 @@ namespace Poczekalniav1.Controllers
             }
             catch (Exception ex)
             {
-                return View("Error");
+                return View("Error", ex);
             }
+        }
+
+        /// <summary>
+        /// The function sends the files from "inputName" field to Main Server Directory/... 
+        /// </summary>
+        /// <param name="inputName">Field name in form</param>
+        /// <param name="serverDirectory">Path to subdirectories. (After Main Server Directory/)</param>
+        /// <returns></returns>
+        private void UploadFile(string inputName, string serverDirectory)
+        {
+            try
+            {
+                HttpPostedFileBase file = Request.Files[inputName];
+
+                if (file != null && file.ContentLength > 0)
+                {
+                    string path = Path.Combine(Server.MapPath("~/" + serverDirectory), Path.GetFileName(file.FileName));
+                    file.SaveAs(path);
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
         }
     }
 }

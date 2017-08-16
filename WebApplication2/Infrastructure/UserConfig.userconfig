@@ -4,18 +4,22 @@
     <Serwer>localhost</Serwer>
     <UserId>gabinet</UserId>
     <Password>Kam$oft1</Password>
-    <ConnectionString>User Id=gabinet;Password=Kam$oft1;Data Source=localhost</ConnectionString>
+    <ConnectionString>User Id=gabinet;Password=Kam$oft1;Data Source=10.0.0.100:1521/MEDIKOR</ConnectionString>
   </DatabaseConfiguration>-->
   <UserConfig>
     <BackgroundImage>
       <FileName>medikor-logo.png</FileName>
-      <Opacity>15</Opacity>
+      <Opacity>20</Opacity>
     </BackgroundImage>
+    <SummonSound>
+      <IsSummonSound>True</IsSummonSound>
+      <FileName>Error2.mp3</FileName>
+    </SummonSound>
     <BackgroundColor>
-      <Color>#E4E4E4</Color>
+      <Color>#E4D9D1</Color>
     </BackgroundColor>
     <BackgroundBlur>0</BackgroundBlur>
-    <OnlyWithNumberQueue>True</OnlyWithNumberQueue>
+    <OnlyWithNumberQueue>False</OnlyWithNumberQueue>
     <WezwaniPacjenci>True</WezwaniPacjenci>
     <KolejkaWezwan>
       <Header>
@@ -29,16 +33,36 @@
         <BoxShadow>
           <HorizontalOffset>0</HorizontalOffset>
           <VerticalOffset>0</VerticalOffset>
-          <Blur>10</Blur>
-          <Spread>0</Spread>
-          <!--[Display(Name = "Kolor")]
-        public Color Color { get; set; }-->
+          <Blur>2</Blur>
+          <Spread>1</Spread>
+          <Color>
+            <Alpha>50</Alpha>
+            <Name>000000</Name>
+          </Color>
         </BoxShadow>
       </Header>
-      <NumberColorFrom>#745CCA</NumberColorFrom>
-      <NumberColorTo>#633ACA</NumberColorTo>
-      <NumerPacjentaFontSize>50</NumerPacjentaFontSize>
-      <GabinetFontSize>20</GabinetFontSize>
+      <Numerek>
+        <ColorFrom>#3AAC23</ColorFrom>
+        <ColorTo>#47D02B</ColorTo>
+        <Height>0</Height>
+        <GabinetFont>
+          <Size>36</Size>
+        </GabinetFont>
+        <NumerPacjentaFont>
+          <Size>20</Size>
+        </NumerPacjentaFont>
+        <HasShadow>True</HasShadow>
+        <BoxShadow>
+          <HorizontalOffset>0</HorizontalOffset>
+          <VerticalOffset>0</VerticalOffset>
+          <Blur>2</Blur>
+          <Spread>1</Spread>
+          <Color>
+            <Alpha>50</Alpha>
+            <Name>000000</Name>
+          </Color>
+        </BoxShadow>
+      </Numerek>
     </KolejkaWezwan>
   </UserConfig>
 </Configuration>

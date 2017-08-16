@@ -75,6 +75,22 @@ namespace Poczekalniav1.Infrastructure
             }
         }
 
+        public static bool IsSummonSound
+        {
+            get { return (bool)_optionFile.Element("UserConfig").Element("SummonSound").Element("IsSummonSound"); }
+            set
+            {
+                _optionFile.Element("UserConfig").Element("SummonSound").Element("IsSummonSound").Value = value.ToString();
+                _optionFile.Save(Paths.UserConfigPath);
+            }
+        }
+        
+        public static string SummonSound
+        {
+            get{ return (string)_optionFile.Element("UserConfig").Element("SummonSound").Element("FileName");}
+            set{_optionFile.Element("UserConfig").Element("SummonSound").Element("FileName").Value = value;_optionFile.Save(Paths.UserConfigPath);}
+        }
+
         public static bool WezwaniPacjenci
         {
             get { return (bool)_optionFile.Element("UserConfig").Element("WezwaniPacjenci"); }
@@ -100,9 +116,11 @@ namespace Poczekalniav1.Infrastructure
             get
             {
                 XElement XKol = _optionFile.Element("UserConfig").Element("KolejkaWezwan");
+                XElement xHeadColor = XKol.Element("Header").Element("BoxShadow").Element("Color");
+                XElement xNumColor = XKol.Element("Numerek").Element("BoxShadow").Element("Color");
                 KolejkaWezwanych kol = new KolejkaWezwanych
                 {
-                    Header = new Kafelek
+                    Header = new KafelekNaglowka
                     {
                         ColorFrom = XKol.Element("Header").Element("ColorFrom").Value,
                         ColorTo = XKol.Element("Header").Element("ColorTo").Value,
@@ -118,13 +136,35 @@ namespace Poczekalniav1.Infrastructure
                             VerticalOffset = byte.Parse(XKol.Element("Header").Element("BoxShadow").Element("VerticalOffset").Value),
                             Blur = byte.Parse(XKol.Element("Header").Element("BoxShadow").Element("Blur").Value),
                             Spread = byte.Parse(XKol.Element("Header").Element("BoxShadow").Element("Spread").Value),
-                            Color = Color.BlueViolet
+                            Color = xHeadColor.Element("Name").Value,
+                            ColorAlpha = byte.Parse(xHeadColor.Element("Alpha").Value)
                         }
                     },
-                    NumberColorFrom = XKol.Element("NumberColorFrom").Value,
-                    NumberColorTo = XKol.Element("NumberColorTo").Value,
-                    NumerPacjentaFontSize = byte.Parse(XKol.Element("NumerPacjentaFontSize").Value),
-                    GabinetFontSize = byte.Parse(XKol.Element("GabinetFontSize").Value)
+                    Numerek = new KafelekNumerka
+                    {
+                        ColorFrom = XKol.Element("Numerek").Element("ColorFrom").Value,
+                        ColorTo = XKol.Element("Numerek").Element("ColorTo").Value,
+                        Height = byte.Parse(XKol.Element("Numerek").Element("Height").Value),
+                        GabinetFont = new Models.Font
+                        {
+                            FontSize = byte.Parse(XKol.Element("Numerek").Element("GabinetFont").Element("Size").Value)
+                        },
+                        NumerPacjentaFont = new Models.Font
+                        {
+                            FontSize = byte.Parse(XKol.Element("Numerek").Element("NumerPacjentaFont").Element("Size").Value)
+                        },
+                        HasShadow = (bool)XKol.Element("Numerek").Element("HasShadow"),
+                        BoxShadow = new BoxShadow
+                        {
+                            HorizontalOffset = byte.Parse(XKol.Element("Numerek").Element("BoxShadow").Element("HorizontalOffset").Value),
+                            VerticalOffset = byte.Parse(XKol.Element("Numerek").Element("BoxShadow").Element("VerticalOffset").Value),
+                            Blur = byte.Parse(XKol.Element("Numerek").Element("BoxShadow").Element("Blur").Value),
+                            Spread = byte.Parse(XKol.Element("Numerek").Element("BoxShadow").Element("Spread").Value),
+                            Color = xNumColor.Element("Name").Value,
+                            ColorAlpha = byte.Parse(xNumColor.Element("Alpha").Value)
+
+                        }
+                    }
                 };
                 return kol;
             }
@@ -133,22 +173,36 @@ namespace Poczekalniav1.Infrastructure
                 XElement XKol = _optionFile.Element("UserConfig").Element("KolejkaWezwan");
                 KolejkaWezwanych kol = value;
 
+                #region SetHeader
+
                 XKol.Element("Header").Element("ColorFrom").Value = FormatujKolor(kol.Header.ColorFrom);
                 XKol.Element("Header").Element("ColorTo").Value = FormatujKolor(kol.Header.ColorTo);
                 XKol.Element("Header").Element("Height").Value = kol.Header.Height.ToString();
                 XKol.Element("Header").Element("Font").Element("Size").Value = kol.Header.Font.FontSize.ToString();
-
                 XKol.Element("Header").Element("HasShadow").Value = kol.Header.HasShadow.ToString();
-                XKol.Element("Header").Element("BoxShadow").Element("HorizontalOffset").Value = kol.Header.BoxShadow.HorizontalOffset.ToString();
-                XKol.Element("Header").Element("BoxShadow").Element("VerticalOffset").Value = kol.Header.BoxShadow.VerticalOffset.ToString();
-                XKol.Element("Header").Element("BoxShadow").Element("Blur").Value = kol.Header.BoxShadow.Blur.ToString();
-                XKol.Element("Header").Element("BoxShadow").Element("Spread").Value = kol.Header.BoxShadow.Spread.ToString();
+                XKol.Element("Header").Element("BoxShadow").Element("HorizontalOffset").Value = kol.Header.HasShadow ? kol.Header.BoxShadow.HorizontalOffset.ToString() : "0";
+                XKol.Element("Header").Element("BoxShadow").Element("VerticalOffset").Value = kol.Header.HasShadow ? kol.Header.BoxShadow.VerticalOffset.ToString() : "0";
+                XKol.Element("Header").Element("BoxShadow").Element("Blur").Value = kol.Header.HasShadow ? kol.Header.BoxShadow.Blur.ToString() : "0";
+                XKol.Element("Header").Element("BoxShadow").Element("Spread").Value = kol.Header.HasShadow ? kol.Header.BoxShadow.Spread.ToString() : "0";
+                XKol.Element("Header").Element("BoxShadow").Element("Color").Element("Alpha").Value = kol.Header.HasShadow ? kol.Header.BoxShadow.ColorAlpha.ToString() : "0";
+                XKol.Element("Header").Element("BoxShadow").Element("Color").Element("Name").Value = kol.Header.HasShadow ? kol.Header.BoxShadow.Color.ToString() : "#000000";
+                #endregion
 
+                #region SetNumerek
+                XKol.Element("Numerek").Element("ColorFrom").Value = FormatujKolor(kol.Numerek.ColorFrom);
+                XKol.Element("Numerek").Element("ColorTo").Value = FormatujKolor(kol.Numerek.ColorTo);
+                XKol.Element("Numerek").Element("Height").Value = kol.Numerek.Height.ToString();
+                XKol.Element("Numerek").Element("GabinetFont").Element("Size").Value = kol.Numerek.NumerPacjentaFont.FontSize.ToString();
+                XKol.Element("Numerek").Element("NumerPacjentaFont").Element("Size").Value = kol.Numerek.GabinetFont.FontSize.ToString();
+                XKol.Element("Numerek").Element("HasShadow").Value = kol.Numerek.HasShadow.ToString();
+                XKol.Element("Numerek").Element("BoxShadow").Element("HorizontalOffset").Value = kol.Numerek.HasShadow ? kol.Numerek.BoxShadow.HorizontalOffset.ToString() : "0";
+                XKol.Element("Numerek").Element("BoxShadow").Element("VerticalOffset").Value = kol.Numerek.HasShadow ? kol.Numerek.BoxShadow.VerticalOffset.ToString() : "0";
+                XKol.Element("Numerek").Element("BoxShadow").Element("Blur").Value = kol.Numerek.HasShadow ? kol.Numerek.BoxShadow.Blur.ToString() : "0";
+                XKol.Element("Numerek").Element("BoxShadow").Element("Spread").Value = kol.Numerek.HasShadow ? kol.Numerek.BoxShadow.Spread.ToString() : "0";
+                XKol.Element("Numerek").Element("BoxShadow").Element("Color").Element("Alpha").Value = kol.Numerek.HasShadow ? kol.Numerek.BoxShadow.ColorAlpha.ToString() : "0";
+                XKol.Element("Numerek").Element("BoxShadow").Element("Color").Element("Name").Value = kol.Numerek.HasShadow ? kol.Numerek.BoxShadow.Color.ToString() : "#000000";
 
-                XKol.Element("NumberColorFrom").Value = FormatujKolor(kol.NumberColorFrom);
-                XKol.Element("NumberColorTo").Value = FormatujKolor(kol.NumberColorTo);
-                XKol.Element("NumerPacjentaFontSize").Value = kol.NumerPacjentaFontSize.ToString();
-                XKol.Element("GabinetFontSize").Value = kol.GabinetFontSize.ToString();
+                #endregion
 
                 _optionFile.Save(Paths.UserConfigPath);
             }
@@ -177,6 +231,8 @@ namespace Poczekalniav1.Infrastructure
             model.BackgroundImg = BackgroundImage;
             model.BackgroundImgOpacity = BackgroundImageOpacity;
             model.BackgroundBlur = BackgroundBlur;
+            model.IsSummonSound = IsSummonSound;
+            model.SummonSound = SummonSound;
             model.OnlyWithNumberQueue = OnlyWithNumberQueue;
             model.WezwaniPacjenci = WezwaniPacjenci;
             model.KolejkaWezwanych = KolejkaWezwanych;

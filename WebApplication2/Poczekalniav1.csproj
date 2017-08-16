@@ -180,6 +180,8 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\medikor-logo.png" />
+    <Content Include="Content\Sounds\Bleep-sound.mp3" />
+    <Content Include="Content\Sounds\Error.mp3" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

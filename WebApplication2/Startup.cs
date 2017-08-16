@@ -1,5 +1,6 @@
 ﻿using Microsoft.Owin;
 using Owin;
+using Poczekalniav1.DAL;
 using Poczekalniav1.Infrastructure;
 
 [assembly: OwinStartupAttribute(typeof(Poczekalniav1.Startup))]
@@ -11,7 +12,8 @@ namespace Poczekalniav1
         {
             appBuilder.MapSignalR();
             NasluchBazy nasluch = new NasluchBazy();
-            nasluch.initApp();
+            OracleDbManager db = new OracleDbManager();
+            nasluch.initApp(db.PobierzProszonychPacjentow());
         }
     }
 }
