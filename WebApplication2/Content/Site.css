@@ -43,15 +43,20 @@ textarea {
     max-width: 280px;
 }
 
-table tr td {
-    vertical-align: 0;
-    line-height: 0;
-    padding: 5px;
+a, a:hover, a:active, a:visited, a:focus{
+    text-decoration:none;
+    color: inherit;
 }
 
-    table tr td label {
-        line-height: 0;
-    }
+table{
+    width: 100%;
+}
+
+table tr{
+}
+
+table tr td {
+}
 
 .wycentrujWertykalnie {
     position: absolute;
@@ -72,24 +77,6 @@ table tr td {
     filter: blur(10px);
 }
 
-/*<div id="layoutContainer" style="">
-
-    <div style="color:wheat;padding:20px">
-        <div id="kolejka-header">
-            Kolejka do wezwania: 
-        </div>
-        <div id="kolejka">
-            <div class="mini-numer-kontener">
-                <div class="mini-numer-zawartosc">
-                    <div class="mini-numer-numerPacjenta">Numer: 20</div>
-                    <div class="mini-numer-nazwaGabinetu">Gabinet: NFZ Ginekolog</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>*/
-
 #layoutContainer {
     position: absolute;
     width: 100%;
@@ -99,7 +86,6 @@ table tr td {
 #kolejka-container {
     display: flex;
 }
-
 
 #KolejkaWzywanychPacjentow {
     flex-grow: 1;
@@ -136,13 +122,14 @@ table tr td {
 }
 
 #OpcjeWindowKontener {
-    position: relative;
+    position: absolute;
     background-color: white;
     box-shadow: rgba(0,0,0,0.8) 0px 0px 150px 10px;
     border-radius: 10px;
-    height: 60%;
+    overflow-x: hidden;
     overflow-y: auto;
 }
+
 
 #OpcjeWindowZawartosc {
     padding: 10px 30px 30px;

@@ -10,6 +10,7 @@ namespace Poczekalniav1
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js",
+                        "~/Scripts/jquery. scroller.min.js",
                         "~/Scripts/jscolor.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
@@ -26,6 +27,7 @@ namespace Poczekalniav1
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/ scroller.css",
                       "~/Content/site.css"));
         }
     }

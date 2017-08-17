@@ -94,6 +94,9 @@
                 <div class="numerPacjenta" id="numerPacjenta">
                     20
                 </div>
+                <div class="godzinaWizyty" id="godzinaWizyty">
+                    11:30
+                </div>
                 <div class="nazwaGabinetu" id="nazwaGabinetu">
                     NFZ GINEKOLOG
                 </div>
@@ -112,6 +115,7 @@
     <script>
             var dzwiek = document.getElementById("dzwiek");
         $(function () {
+
             $.connection.hub.start().done(function () {
                 clientHub.server.podlaczonoNowegoklienta($.connection.hub.id);
             });

@@ -105,6 +105,10 @@ namespace Poczekalniav1.Models
     {
         [Display(Name = "Czcionka")]
         public Font Font { get; set; }
+
+        public bool ShowEmployeeName { get; set; }
+        public bool ShowSurgeryName { get; set; }
+        public bool ShowSyrgeryNr { get; set; }
     }
 
     public class KafelekNumerka : Kafelek
@@ -118,8 +122,10 @@ namespace Poczekalniav1.Models
 
     public class Font
     {
-        [Display(Name = "Rozmiar"), Range(1,250, ErrorMessage = "Rozmiar czcionki musi mieścić się w zakresie 1-250")]
+        [Display(Name = "Rozmiar czcionki"), Range(1,250, ErrorMessage = "Rozmiar czcionki musi mieścić się w zakresie 1-250")]
         public byte FontSize { get; set; }
+        [Display(Name = "Kolor czcionki")]
+        public string FontColor { get; set; }
     }
 
     public class BoxShadow

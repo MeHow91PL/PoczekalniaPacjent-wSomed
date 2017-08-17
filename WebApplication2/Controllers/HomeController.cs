@@ -97,13 +97,11 @@ namespace Poczekalniav1.Controllers
             {
                 OpcjeAplikacjiManager.DatabaseConnectionString = model.DatabaseConnString.ConnectionString;
                 OpcjeAplikacjiManager.BackgroundColor = model.BackgroundColor;
-                OpcjeAplikacjiManager.BackgroundImage = model.BackgroundImg ?? OpcjeAplikacjiManager.BackgroundImage;
-                UploadFile("BackgroundImg", "Content/Images");
+                OpcjeAplikacjiManager.BackgroundImage = UploadFile("BackgroundImg", "Content/Images") ?? OpcjeAplikacjiManager.BackgroundImage;
                 OpcjeAplikacjiManager.BackgroundImageOpacity = model.BackgroundImgOpacity;
                 OpcjeAplikacjiManager.BackgroundBlur = model.BackgroundBlur;
                 OpcjeAplikacjiManager.IsSummonSound = model.IsSummonSound;
-                OpcjeAplikacjiManager.SummonSound = model.SummonSound ?? OpcjeAplikacjiManager.SummonSound;
-                UploadFile("SummonSound", "Content/Sounds");
+                OpcjeAplikacjiManager.SummonSound = UploadFile("SummonSound", "Content/Sounds") ?? OpcjeAplikacjiManager.SummonSound;
                 OpcjeAplikacjiManager.OnlyWithNumberQueue = model.OnlyWithNumberQueue;
                 OpcjeAplikacjiManager.WezwaniPacjenci = model.WezwaniPacjenci;
                 OpcjeAplikacjiManager.KolejkaWezwanych = model.KolejkaWezwanych;
@@ -122,7 +120,7 @@ namespace Poczekalniav1.Controllers
         /// <param name="inputName">Field name in form</param>
         /// <param name="serverDirectory">Path to subdirectories. (After Main Server Directory/)</param>
         /// <returns></returns>
-        private void UploadFile(string inputName, string serverDirectory)
+        private string UploadFile(string inputName, string serverDirectory)
         {
             try
             {
@@ -132,7 +130,9 @@ namespace Poczekalniav1.Controllers
                 {
                     string path = Path.Combine(Server.MapPath("~/" + serverDirectory), Path.GetFileName(file.FileName));
                     file.SaveAs(path);
+                    return file.FileName;
                 }
+                return null;
             }
             catch (Exception e)
             {

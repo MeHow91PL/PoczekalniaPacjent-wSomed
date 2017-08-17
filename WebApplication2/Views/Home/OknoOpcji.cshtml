@@ -3,10 +3,10 @@
 <div class="wycentrujWertykalnie">
     <div id="OpcjeWindowKontener">
         <div id="OpcjeWindowZawartosc">
+
             @using (@Html.BeginForm("ZapiszOpcje", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 <div>
-
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#DbConfig" aria-controls="DbConfig" role="tab" data-toggle="tab">Baza danych</a></li>
@@ -38,14 +38,14 @@
                         <div role="tabpanel" class="tab-pane" id="Tlo">
                             <table>
                                 <tr>
-                                    <td>@Html.LabelFor(m => m.BackgroundColor)</td>
+                                    <td> @Html.LabelFor(m => m.BackgroundColor)</td>
                                     <td>#@Html.TextBoxFor(m => m.BackgroundColor, new { @class = "jscolor" }) </td>
                                 </tr>
 
                                 <tr>
                                     <td>@Html.LabelFor(m => m.BackgroundImg)</td>
                                     <td>@Html.TextBoxFor(m => m.BackgroundImg, new { @type = "file" })</td>
-                                    
+
                                 </tr>
                                 <tr>
                                     <td>@Html.LabelFor(m => m.BackgroundImgOpacity)</td>
@@ -78,110 +78,139 @@
                             </table>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="KolejkaWezwan">
-                            <table>
-                                <tr>
-                                    <td colspan="2"> Opcje kafelka z nagłówkiem kolejki</td>
-                                </tr>
-                                <tr>
-                                    <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.ColorFrom) </td>
-                                    <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.ColorFrom, new { @class = "jscolor" }) </td>
-                                </tr>
-                                <tr>
-                                    <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.ColorTo) </td>
-                                    <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.ColorTo, new { @class = "jscolor" }) </td>
-                                </tr>
-                                <tr>
-                                    <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.Font.FontSize) </td>
-                                    <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.Font.FontSize) </td>
-                                </tr>
-                                <tr>
-                                    <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.HasShadow) </td>
-                                    <td>@Html.CheckBoxFor(m => m.KolejkaWezwanych.Header.HasShadow) </td>
-                                </tr>
-                                @{string display = Model.KolejkaWezwanych.Header.HasShadow ? "table-row-group" : "none"; }
-                                <tbody class="OpcjeHeaderBoxShadowOption" style="display:@display">
-                                    <tr>
-                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.BoxShadow.HorizontalOffset) </td>
-                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.BoxShadow.HorizontalOffset, new { @type = "number", @min = -150, @max = 150 }) </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.BoxShadow.VerticalOffset) </td>
-                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.BoxShadow.VerticalOffset, new { @type = "number", @min = -150, @max = 150 }) </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.BoxShadow.Blur) </td>
-                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.BoxShadow.Blur, new { @type = "number", @min = -150, @max = 150 }) </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.BoxShadow.Spread) </td>
-                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.BoxShadow.Spread, new { @type = "number", @min = -150, @max = 150 }) </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.BoxShadow.Color) </td>
-                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.BoxShadow.Color, new { @class = "jscolor" }) </td>
-                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.BoxShadow.ColorAlpha) </td>
-                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.BoxShadow.ColorAlpha, new { @type = "number", @min = 0, @max = 100 }) </td>
-                                    </tr>
-                                </tbody>
-                                <tbody>
-                                    <tr>
-                                        <td colspan="2"> Opcje kafelka z wzywanym numerem</td>
-                                    </tr>
-                                    <tr>
-                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.ColorFrom) </td>
-                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.ColorFrom, new { @class = "jscolor" }) </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.ColorTo) </td>
-                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.ColorTo, new { @class = "jscolor" }) </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.NumerPacjentaFont.FontSize) </td>
-                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.NumerPacjentaFont.FontSize, new { @type = "number", @min = 1, @max = 100 }) </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.GabinetFont.FontSize) </td>
-                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.GabinetFont.FontSize, new { @type = "number", @min = 1, @max = 100 }) </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.HasShadow) </td>
-                                        <td>@Html.CheckBoxFor(m => m.KolejkaWezwanych.Numerek.HasShadow) </td>
-                                    </tr>
-                                    @{string numHasShadow = Model.KolejkaWezwanych.Numerek.HasShadow ? "table-row-group" : "none"; }
-                                <tbody class="OpcjeNumBoxShadowOption" style="display:@numHasShadow">
-                                    <tr>
-                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.HorizontalOffset) </td>
-                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.HorizontalOffset, new { @type = "number", @min = -150, @max = 150 }) </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.VerticalOffset) </td>
-                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.VerticalOffset, new { @type = "number", @min = -150, @max = 150 }) </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.Blur) </td>
-                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.Blur, new { @type = "number", @min = -150, @max = 150 }) </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.Spread) </td>
-                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.Spread, new { @type = "number", @min = -150, @max = 150 }) </td>
-                                    </tr>
-                                    <tr>
-                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.Color) </td>
-                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.Color, new { @class = "jscolor" }) </td>
-                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.ColorAlpha) </td>
-                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.ColorAlpha, new { @type = "number", @min = 0, @max = 100 }) </td>
-                                    </tr>
-                                </tbody>
 
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#QueueHeader">
+                                            <h4 class="panel-title">
+                                                Nagłówek kolejki
+                                            </h4>
+                                        </a>
+                                    </div>
+                                    <div id="QueueHeader" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <table>
+                                                <tr>
+                                                    <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.ColorFrom) </td>
+                                                    <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.ColorFrom, new { @class = "jscolor" }) </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.ColorTo) </td>
+                                                    <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.ColorTo, new { @class = "jscolor" }) </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.Font.FontSize) </td>
+                                                    <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.Font.FontSize) </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.HasShadow) </td>
+                                                    <td>@Html.CheckBoxFor(m => m.KolejkaWezwanych.Header.HasShadow) </td>
+                                                </tr>
+                                                @{string display = Model.KolejkaWezwanych.Header.HasShadow ? "table-row-group" : "none"; }
+                                                <tbody class="OpcjeHeaderBoxShadowOption" style="display:@display">
+                                                    <tr>
+                                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.BoxShadow.HorizontalOffset) </td>
+                                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.BoxShadow.HorizontalOffset, new { @type = "number", @min = -150, @max = 150 }) </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.BoxShadow.VerticalOffset) </td>
+                                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.BoxShadow.VerticalOffset, new { @type = "number", @min = -150, @max = 150 }) </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.BoxShadow.Blur) </td>
+                                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.BoxShadow.Blur, new { @type = "number", @min = -150, @max = 150 }) </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.BoxShadow.Spread) </td>
+                                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.BoxShadow.Spread, new { @type = "number", @min = -150, @max = 150 }) </td>
+                                                    </tr>
+                                                    <tr>                                                        
+                                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.BoxShadow.Color) </td>
+                                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.BoxShadow.Color, new { @class = "jscolor" }) </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Header.BoxShadow.ColorAlpha) </td>
+                                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Header.BoxShadow.ColorAlpha, new { @type = "number", @min = 0, @max = 100 }) </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
 
-                            </table>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#QueueNumber">
+                                            <h4 class="panel-title">
+                                                Numer w kolejce
+                                            </h4>
+                                        </a>
+                                    </div>
+                                    <div id="QueueNumber" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <table>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.ColorFrom) </td>
+                                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.ColorFrom, new { @class = "jscolor" }) </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.ColorTo) </td>
+                                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.ColorTo, new { @class = "jscolor" }) </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.NumerPacjentaFont.FontSize) </td>
+                                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.NumerPacjentaFont.FontSize, new { @type = "number", @min = 1, @max = 100 }) </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.GabinetFont.FontSize) </td>
+                                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.GabinetFont.FontSize, new { @type = "number", @min = 1, @max = 100 }) </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.HasShadow) </td>
+                                                        <td>@Html.CheckBoxFor(m => m.KolejkaWezwanych.Numerek.HasShadow) </td>
+                                                    </tr>
+                                                    @{string numHasShadow = Model.KolejkaWezwanych.Numerek.HasShadow ? "table-row-group" : "none"; }
+                                                <tbody class="OpcjeNumBoxShadowOption" style="display:@numHasShadow">
+                                                    <tr>
+                                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.HorizontalOffset) </td>
+                                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.HorizontalOffset, new { @type = "number", @min = -150, @max = 150 }) </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.VerticalOffset) </td>
+                                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.VerticalOffset, new { @type = "number", @min = -150, @max = 150 }) </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.Blur) </td>
+                                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.Blur, new { @type = "number", @min = -150, @max = 150 }) </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.Spread) </td>
+                                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.Spread, new { @type = "number", @min = -150, @max = 150 }) </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.Color) </td>
+                                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.Color, new { @class = "jscolor" }) </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Html.LabelFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.ColorAlpha) </td>
+                                                        <td>@Html.TextBoxFor(m => m.KolejkaWezwanych.Numerek.BoxShadow.ColorAlpha, new { @type = "number", @min = 0, @max = 100 }) </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div id="subBtnContainer" style="bottom:20px;position:relative;">
-                        <button type="submit">Zapisz</button>
+
                     </div>
                 </div>
-                                        }
+                <div id="subBtnContainer" style="bottom:20px;position:relative;">
+                    <button type="submit">Zapisz</button>
+                </div>
+                                                        }
         </div>
     </div>
 </div>
@@ -192,7 +221,11 @@
         $('#myTabs a').click(function (e) {
             e.preventDefault()
             $(this).tab('show')
-        })
+        });
+
+        $(function () {
+            $(". ").Scroller({ alwaysVisible: true });
+        });
 
 
     </script>
