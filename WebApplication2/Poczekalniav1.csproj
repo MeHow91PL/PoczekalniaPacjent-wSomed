@@ -161,6 +161,7 @@
     </Compile>
     <Compile Include="Hubs\TestHub.cs" />
     <Compile Include="Infrastructure\ChangedDbEventArgs.cs" />
+    <Compile Include="Infrastructure\Hash.cs" />
     <Compile Include="Infrastructure\NasluchBazy.cs" />
     <Compile Include="Infrastructure\OpcjeManager.cs" />
     <Compile Include="Infrastructure\Statics.cs" />
@@ -192,6 +193,7 @@
     <Content Include="Infrastructure\UserConfig.userconfig">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Neiio-Prime-Dock-2-Recycle-Bin-Full.ico" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
@@ -255,6 +257,9 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Neiio-Prime-Dock-2-Recycle-Bin-Full.ico</ApplicationIcon>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

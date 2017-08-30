@@ -12,8 +12,7 @@ namespace Poczekalniav1
         {
             appBuilder.MapSignalR();
             NasluchBazy nasluch = new NasluchBazy();
-            OracleDbManager db = new OracleDbManager();
-            nasluch.initApp(db.PobierzProszonychPacjentow());
+            nasluch.initApp();
         }
     }
 }

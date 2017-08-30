@@ -23,14 +23,13 @@ namespace Poczekalniav1.DAL
 
 
         //"User Id=gabinet;Password=Kam$oft1;Data Source=localhost"
-        public override void PodlaczDoBazy()
+        public override bool CzyPolaczonoPoprawnie()
         {
             bd1.Database.Connection.ConnectionString = OpcjeAplikacjiManager.DatabaseConnectionString;
-            if (!PolaczonoZBaza)
-            {
-                throw new Exception("Nie udało się nawiązać połączenia z bazą danych! /n" +
-                    "Szczególy: ");
-            }
+            if (!PolaczonoZBaza) return false;
+            else return true;
+            //throw new Exception("Nie udało się nawiązać połączenia z bazą danych! /n" +
+            //    "Szczególy: ");
         }
 
         public bool PolaczonoZBaza
@@ -78,10 +77,18 @@ namespace Poczekalniav1.DAL
         {
             using (OracDbContext db = new OracDbContext())
             {
-                List<ProszonyPacjentModel> t =
-                        db.Database.SqlQuery<ProszonyPacjentModel>("SELECT GABINET_ID, GABINET_NAZWA, GABINET_NUMER, NUMER_DZIENNY " +
-                            "from PROSZENI_PACJENCI").ToList();
-                return t;
+                if (PolaczonoZBaza)
+                {
+
+                    List<ProszonyPacjentModel> t =
+                            db.Database.SqlQuery<ProszonyPacjentModel>("select p.GABINET_ID, p.GABINET_NAZWA, p.GABINET_NUMER, p.NUMER_DZIENNY, to_char(d.GODZINA, 'HH24:MI') as GODZINA " +
+                                "from PROSZENI_PACJENCI p join PACJENCI_NA_DZIS d on (d.NUMER_DZIENNY = p.NUMER_DZIENNY)").ToList();
+                    return t;
+                }
+                else
+                {
+                    return new List<ProszonyPacjentModel>();
+                }
             }
         }
 
@@ -100,7 +107,11 @@ namespace Poczekalniav1.DAL
 
             public OracDbContext() : base("OracleDbContext")
             {
+                //Właściwe ustawienie
                 this.Database.Connection.ConnectionString = OpcjeAplikacjiManager.DatabaseConnectionString;
+
+                //Ust. do testów lokalnych
+                //this.Database.Connection.ConnectionString = "User Id=gabinet;Password=Kam$oft1;Data Source=localhost";
             }
 
 

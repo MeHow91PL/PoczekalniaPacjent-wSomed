@@ -42,10 +42,6 @@ namespace Poczekalniav1.DAL
             testowaLista.Remove(testowaLista.Find(p => p.NUMER_DZIENNY == nr));
         }
 
-        public override void PodlaczDoBazy()
-        {
-            throw new NotImplementedException();
-        }
 
         public override ProszonyPacjentModel PobierzProszonegoPacjentaPoId(int numerDzienny)
         {
@@ -72,5 +68,9 @@ namespace Poczekalniav1.DAL
             return testowaLista.FindAll(p => p.GABINET_NAZWA == nazwaGabinetu);
         }
 
+        public override bool CzyPolaczonoPoprawnie()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

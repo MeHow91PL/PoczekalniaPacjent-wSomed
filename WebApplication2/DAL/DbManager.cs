@@ -11,7 +11,7 @@ namespace Poczekalniav1.DAL
     {
         public abstract int IloscProszonychPacjentow { get;  }
         public abstract Queue<ProszonyPacjentModel> KolejkaWezwan { get; }
-        public abstract void PodlaczDoBazy();
+        public abstract bool CzyPolaczonoPoprawnie();
         public abstract ProszonyPacjentModel PobierzProszonegoPacjentaPoId(int numerDzienny);
         public abstract List<ProszonyPacjentModel> PobierzProszonychPacjentow();
         public abstract List<ProszonyPacjentModel> PobierzProszonychPacjentow(int idPoczekalni);

@@ -7,58 +7,90 @@
     <ConnectionString>User Id=gabinet;Password=Kam$oft1;Data Source=10.0.0.100:1521/MEDIKOR</ConnectionString>
   </DatabaseConfiguration>-->
   <UserConfig>
+    <BackgroundColor>
+      <Color>#E4D9D1</Color>
+    </BackgroundColor>
     <BackgroundImage>
       <FileName>medikor-logo.png</FileName>
       <Opacity>20</Opacity>
     </BackgroundImage>
+    <BackgroundBlur>0</BackgroundBlur>
+    <OnlyWithNumberQueue>False</OnlyWithNumberQueue>
+    <SummonNumber>
+      <ColorFrom>#200096</ColorFrom>
+      <ColorTo>#4024E0</ColorTo>
+      <Height>0</Height>
+      <FontColor>#FFFFFF</FontColor>
+      <NumberFont>
+        <Size>200</Size>
+      </NumberFont>
+      <TimeFont>
+        <Size>60</Size>
+      </TimeFont>
+      <SurgeryFont>
+        <Size>60</Size>
+      </SurgeryFont>
+      <DisplayTime>20</DisplayTime>
+      <!--<HasShadow>True</HasShadow>
+      <BoxShadow>
+        <HorizontalOffset>0</HorizontalOffset>
+        <VerticalOffset>0</VerticalOffset>
+        <Blur>2</Blur>
+        <Spread>1</Spread>
+        <Color>
+          <Alpha>50</Alpha>
+          <Name>000000</Name>
+        </Color>
+      </BoxShadow>-->
+    </SummonNumber>
     <SummonSound>
       <IsSummonSound>True</IsSummonSound>
       <FileName>Error2.mp3</FileName>
     </SummonSound>
-    <BackgroundColor>
-      <Color>#E4D9D1</Color>
-    </BackgroundColor>
-    <BackgroundBlur>0</BackgroundBlur>
-    <OnlyWithNumberQueue>False</OnlyWithNumberQueue>
     <WezwaniPacjenci>True</WezwaniPacjenci>
     <KolejkaWezwan>
       <Header>
         <ColorFrom>#221BA4</ColorFrom>
-        <ColorTo>#352AFF</ColorTo>
+        <ColorTo>#5944FF</ColorTo>
         <Height>0</Height>
+        <FontColor>#FFFFFF</FontColor>
         <Font>
           <Size>24</Size>
         </Font>
         <HasShadow>True</HasShadow>
         <BoxShadow>
           <HorizontalOffset>0</HorizontalOffset>
-          <VerticalOffset>0</VerticalOffset>
-          <Blur>2</Blur>
-          <Spread>1</Spread>
+          <VerticalOffset>1</VerticalOffset>
+          <Blur>1</Blur>
+          <Spread>0</Spread>
           <Color>
-            <Alpha>50</Alpha>
+            <Alpha>70</Alpha>
             <Name>000000</Name>
           </Color>
         </BoxShadow>
       </Header>
       <Numerek>
         <ColorFrom>#3AAC23</ColorFrom>
-        <ColorTo>#47D02B</ColorTo>
+        <ColorTo>#4EE42F</ColorTo>
         <Height>0</Height>
+        <FontColor>#FFFFFF</FontColor>
         <GabinetFont>
-          <Size>36</Size>
-        </GabinetFont>
-        <NumerPacjentaFont>
           <Size>20</Size>
+        </GabinetFont>
+        <TimeFont>
+          <Size>24</Size>
+        </TimeFont>
+        <NumerPacjentaFont>
+          <Size>30</Size>
         </NumerPacjentaFont>
         <HasShadow>True</HasShadow>
         <BoxShadow>
           <HorizontalOffset>0</HorizontalOffset>
-          <VerticalOffset>0</VerticalOffset>
+          <VerticalOffset>1</VerticalOffset>
           <Blur>2</Blur>
-          <Spread>1</Spread>
+          <Spread>0</Spread>
           <Color>
-            <Alpha>50</Alpha>
+            <Alpha>70</Alpha>
             <Name>000000</Name>
           </Color>
         </BoxShadow>

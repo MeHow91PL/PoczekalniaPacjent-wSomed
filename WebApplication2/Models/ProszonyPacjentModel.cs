@@ -11,5 +11,6 @@ namespace Poczekalniav1.Models
         public string GABINET_NAZWA { get; set; }
         public string GABINET_NUMER { get; set; }
         public int NUMER_DZIENNY { get; set; }
+        public string GODZINA { get; set; }
     }
 }

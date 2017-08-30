@@ -59,19 +59,6 @@ namespace Poczekalniav1.Controllers
             throw new NotImplementedException();
         }
 
-        private bool WczytajConfig()
-        {
-            try
-            {
-                db.PodlaczDoBazy();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-
         //public struct DbInfo { public string DataSourcce { get; set; } public string ConnString { get; set; } }
         //public JsonResult GetDbInfo()
         //{
@@ -100,6 +87,7 @@ namespace Poczekalniav1.Controllers
                 OpcjeAplikacjiManager.BackgroundImage = UploadFile("BackgroundImg", "Content/Images") ?? OpcjeAplikacjiManager.BackgroundImage;
                 OpcjeAplikacjiManager.BackgroundImageOpacity = model.BackgroundImgOpacity;
                 OpcjeAplikacjiManager.BackgroundBlur = model.BackgroundBlur;
+                OpcjeAplikacjiManager.WzywanyNumer = model.WzywanyNumer;
                 OpcjeAplikacjiManager.IsSummonSound = model.IsSummonSound;
                 OpcjeAplikacjiManager.SummonSound = UploadFile("SummonSound", "Content/Sounds") ?? OpcjeAplikacjiManager.SummonSound;
                 OpcjeAplikacjiManager.OnlyWithNumberQueue = model.OnlyWithNumberQueue;

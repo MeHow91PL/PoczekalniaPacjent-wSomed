@@ -11,10 +11,10 @@ namespace Poczekalniav1.Models
     {
         #region Opcje bazy danych
         public DbConnString DatabaseConnString { get; set; } = new DbConnString();
-        [Display(Name = "Kolor tła")]
         #endregion
 
         #region Opcje Tła
+        [Display(Name = "Kolor tła")]
         public string BackgroundColor { get; set; }
         [Display(Name = "Obrazek tła")]
         public string BackgroundImg { get; set; }
@@ -33,17 +33,19 @@ namespace Poczekalniav1.Models
         #region Opcje layoutu
         [Display(Name = "Wyświetlanie kolejki wezwanych pacjentów")]
         public bool WezwaniPacjenci { get; set; }
-
-        #region Kolejka wezwanych
         public KolejkaWezwanych KolejkaWezwanych { get; set; }
-        #endregion
-
+        public WzywanyNumer WzywanyNumer { get; set; }
         #endregion
     }
+
+
     public class DbConnString
     {
+        [Display(Name = "User ID")]
         public string UserID { get; set; }
+        [Display(Name = "Password")]
         public string Password { get; set; }
+        [Display(Name = "Data source")]
         public string DataSource { get; set; }
         //private string _connectionString;
 
@@ -80,6 +82,14 @@ namespace Poczekalniav1.Models
         }
     }
 
+    public class WzywanyNumer : Kafelek
+    {
+        public int CzasWyswietlania { get; set; }
+        public Font NumberFont { get; set; }
+        public Font TimeFont { get; set; }
+        public Font SurgeryFont { get; set; }
+    }
+
     public class KolejkaWezwanych
     {
         [Display(Name = "Nagłówek")]
@@ -95,6 +105,8 @@ namespace Poczekalniav1.Models
         public string ColorTo { get; set; }
         [Display(Name = "Wysykość"), Range(10, 100, ErrorMessage = "Wysykość musi mieścić się w zakresie 10-100")]
         public byte Height { get; set; }
+        [Display(Name = "Kolor czcionki")]
+        public string FontColor { get; set; }
         [Display(Name = "Włączyć cień")]
         public bool HasShadow { get; set; }
         [Display(Name = "Ust. cienia")]
@@ -108,14 +120,15 @@ namespace Poczekalniav1.Models
 
         public bool ShowEmployeeName { get; set; }
         public bool ShowSurgeryName { get; set; }
-        public bool ShowSyrgeryNr { get; set; }
+        public bool ShowSurgeryNr { get; set; }
     }
 
     public class KafelekNumerka : Kafelek
     {
         [Display(Name = "Numer rozm.")]
         public Font NumerPacjentaFont { get; set; }
-
+        [Display(Name = "Godz rozm.")]
+        public Font TimeFont { get; set; }
         [Display(Name = "Gabinet rozm.")]
         public Font GabinetFont { get; set; }
     }

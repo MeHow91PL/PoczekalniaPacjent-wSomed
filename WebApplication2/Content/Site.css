@@ -75,6 +75,10 @@ table tr td {
     -ms-filter: blur(10px);
     -webkit-filter: blur(10px);
     filter: blur(10px);
+    -moz-transition: 300ms;
+    -o-transition: 300ms;
+    -webkit-transition: 300ms;
+    transition: 300ms;
 }
 
 #layoutContainer {
@@ -136,21 +140,7 @@ table tr td {
 }
 
 @keyframes animacjaNumerka {
-    0% {
-        -moz-filter: brightness(2);
-        -ms-filter: brightness(2);
-        -webkit-filter: brightness(2);
-        filter: brightness(2);
-    }
-
     50% {
-        -moz-filter: brightness(1);
-        -ms-filter: brightness(1);
-        -webkit-filter: brightness(1);
-        filter: brightness(1);
-    }
-
-    100% {
         -moz-filter: brightness(2);
         -ms-filter: brightness(2);
         -webkit-filter: brightness(2);
@@ -176,10 +166,10 @@ table tr td {
     right: 20px;
     box-shadow: rgba(0,0,0,0.7) 0px 0px 5px 0px;
     color: azure;
-    font-size: 100pt;
+    overflow:hidden;
     animation-name: animacjaNumerka;
-    animation-duration: 700ms;
-    animation-iteration-count: 10;
+    animation-duration: 1000ms;
+    animation-iteration-count: 12;
 }
 
 .kafelekNumerka {
@@ -189,12 +179,17 @@ table tr td {
 }
 
 .numerPacjenta {
-    font-size: 200pt;
+    font-size: 250pt;
     font-weight: bold;
+    line-height: 100%;
+}
+
+.godzinaWizyty {
+    font-size: 60pt;
 }
 
 .nazwaGabinetu {
-    font-size: 60pt;
+    font-size: 40pt;
 }
 
 @media only screen and (max-width: 1024px) and (max-height: 768px) {

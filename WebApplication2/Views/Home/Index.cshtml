@@ -1,7 +1,7 @@
 ﻿@using System.Drawing
 @model Poczekalniav1.Models.OpcjeModel
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Poczekalnia";
 }
 @section styles{
     <style>
@@ -27,6 +27,7 @@
 
 .kolejka-header {
     background: linear-gradient(to bottom, @Model.KolejkaWezwanych.Header.ColorFrom 0,@Model.KolejkaWezwanych.Header.ColorTo 100%);
+    color: @Model.KolejkaWezwanych.Header.FontColor;
     font-size: @string.Concat(Model.KolejkaWezwanych.Header.Font.FontSize, "px");
     -moz-box-shadow: @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.HorizontalOffset,"px") @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.VerticalOffset, "px") @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.Blur, "px") @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.Spread, "px") rgba(@headerShadowCol.R, @headerShadowCol.G,@headerShadowCol.B, @headerShadowAlpha);
     -webkit-box-shadow: @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.HorizontalOffset,"px") @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.VerticalOffset, "px") @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.Blur, "px") @string.Concat(Model.KolejkaWezwanych.Header.BoxShadow.Spread, "px") rgba(@headerShadowCol.R, @headerShadowCol.G,@headerShadowCol.B,@headerShadowAlpha);
@@ -35,6 +36,7 @@
 
 .mini-numer-kontener {
     background: linear-gradient(to bottom, @Model.KolejkaWezwanych.Numerek.ColorFrom 0,@Model.KolejkaWezwanych.Numerek.ColorTo 100%);
+    color: @Model.KolejkaWezwanych.Numerek.FontColor;
     -moz-box-shadow: @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.HorizontalOffset,"px") @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.VerticalOffset, "px") @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.Blur, "px") @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.Spread, "px") rgba(@numShadowCol.R, @numShadowCol.G,@numShadowCol.B, @numShadowAlpha );
     -webkit-box-shadow: @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.HorizontalOffset,"px") @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.VerticalOffset, "px") @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.Blur, "px") @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.Spread, "px") rgba(@numShadowCol.R, @numShadowCol.G,@numShadowCol.B,@numShadowAlpha );
     box-shadow: @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.HorizontalOffset,"px") @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.VerticalOffset, "px") @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.Blur, "px") @string.Concat(Model.KolejkaWezwanych.Numerek.BoxShadow.Spread, "px") rgba(@numShadowCol.R, @numShadowCol.G,@numShadowCol.B,@numShadowAlpha );
@@ -45,10 +47,30 @@
     font-size: @string.Concat(Model.KolejkaWezwanych.Numerek.NumerPacjentaFont.FontSize, "px");
 }
 
+.mini-numer-godzinWizyty{
+    font-size: @string.Concat(Model.KolejkaWezwanych.Numerek.TimeFont.FontSize, "px");
+}
+
 .mini-numer-nazwaGabinetu{
     font-size: @string.Concat(Model.KolejkaWezwanych.Numerek.GabinetFont.FontSize, "px");
 }
-    </style>
+
+.kontenerKafelka{
+        background: linear-gradient(to bottom, @Model.WzywanyNumer.ColorFrom 0,@Model.WzywanyNumer.ColorTo 100%);
+}
+
+.numerPacjenta{
+    font-size: @string.Concat(Model.WzywanyNumer.NumberFont.FontSize, "pt");
+}
+
+.godzinaWizyty{
+    font-size: @string.Concat(Model.WzywanyNumer.TimeFont.FontSize, "pt");
+}
+
+.nazwaGabinetu{
+    font-size: @string.Concat(Model.WzywanyNumer.SurgeryFont.FontSize, "pt");
+}
+</style>
 }
 
 @*<div style="position:fixed; z-index:9999; top:0; ">
@@ -87,40 +109,58 @@
 </div>
 
 <div id="numerek" style="display:none">
+    @*<div id="numerek">*@
 
-    <div class="kontenerKafelka">
-        <div class="wycentrujWertykalnie">
-            <div class="kafelekNumerka">
-                <div class="numerPacjenta" id="numerPacjenta">
-                    20
-                </div>
-                <div class="godzinaWizyty" id="godzinaWizyty">
-                    11:30
-                </div>
-                <div class="nazwaGabinetu" id="nazwaGabinetu">
-                    NFZ GINEKOLOG
+        <div class="kontenerKafelka">
+            <div class="wycentrujWertykalnie">
+                <div class="kafelekNumerka">
+                    <div class="numerPacjenta" id="numerPacjenta">
+                        20
+                    </div>
+                    <div class="godzinaWizyty" id="godzinaWizyty">
+                        11:30
+                    </div>
+                    <div class="nazwaGabinetu" id="nazwaGabinetu">
+                        NFZ GINEKOLOG
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<audio audio preload="auto" autobuffer id="dzwiek">
-    <source src="~/Content/Sounds/@Model.SummonSound" type="audio/mpeg" />
-</audio>
-<footer></footer>
-@section scripts{
-    <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
-    <script src="~/signalr/hubs"></script>
-    <script>
+    <audio audio preload="auto" autobuffer id="dzwiek">
+        <source src="~/Content/Sounds/@Model.SummonSound" type="audio/mpeg" />
+    </audio>
+    <footer></footer>
+    @section scripts{
+        <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
+        <script src="~/signalr/hubs"></script>
+        <script>
             var dzwiek = document.getElementById("dzwiek");
+
+           
+
         $(function () {
+            var interval = setInterval(testPolaczeniaHuba, 5000);
+
+            var clientHub = $.connection.testHub;
 
             $.connection.hub.start().done(function () {
                 clientHub.server.podlaczonoNowegoklienta($.connection.hub.id);
             });
-            var clientHub = $.connection.testHub;
 
+            function testPolaczeniaHuba() {
+                console.log("Status połaczenia z serwerem: " + clientHub.connection.state);
+                if (clientHub.connection.state == 3 || clientHub.connection.state == 4) {
+                    clientHub.connection.stop();
+                    clientHub.connection.start();
+                }
+            }
+
+            clientHub.client.addLogMessage = function (message) {
+                //alert("Utracono połączenie z bazą danych. Wyświetlane dane mogą być nieaktualne!");
+                console.log(message);
+            };
 
             clientHub.client.aktuKolejkeDoWezwania = function (wzywani, gabinety) {
                 $("#kolejka-container").html("");
@@ -142,13 +182,13 @@
                     var gabinetHeader =
                         '<div id="KolejkaWzywanychPacjentow"> ' +
                         '<div class="kolejka-header">' +
-                        gabinety[i].Nazwa +
+                        'Gabinet nr: ' + gabinety[i].Numer +
                         '</div> ' +
                         '<div id="kolejka"> ';
 
                     for (var j = 0; j < wzywani.length; j++) {
                         if (wzywani[j].GABINET_ID == gabinety[i].Id) {
-                            gabinetHeader += StworzMiniKafelek(wzywani[j].NUMER_DZIENNY, wzywani[j].GABINET_NAZWA);
+                            gabinetHeader += StworzMiniKafelek(wzywani[j].NUMER_DZIENNY, wzywani[j].GODZINA, wzywani[j].GABINET_NUMER);
                         }
                         ///*$("#kolejka").append(*/StworzMiniKafelek(wzywani[j].NUMER_DZIENNY, wzywani[j].GABINET_NAZWA));
                         console.log(wzywani[i]);
@@ -158,12 +198,13 @@
                 }
             };
 
-            function StworzMiniKafelek(nr, gab) {
+            function StworzMiniKafelek(nr, godz, gab) {
                 var html =
                     '<div class="mini-numer-kontener">' +
                     '   <div class="mini-numer-zawartosc">' +
                     '       <div class="mini-numer-numerPacjenta">Numer: ' + nr + '</div>' +
-                    '       <div class="mini-numer-nazwaGabinetu">Gabinet: ' + gab + '</div>' +
+                    '       <div class="mini-numer-godzinWizyty">' + godz + '</div>' +
+                    '       <div class="mini-numer-nazwaGabinetu">Gabinet nr: ' + gab + '</div>' +
                     '   </div>' +
                     '</div>';
 
@@ -181,8 +222,9 @@
                     console.log(info);
                     dzwiek.play();
                     $("#numerPacjenta").html(message.NUMER_DZIENNY);
-                    $("#nazwaGabinetu").html(message.GABINET_NAZWA);
-                    $("#numerek").css("display", "block");
+                    $("#godzinaWizyty").html(message.GODZINA);
+                    $("#nazwaGabinetu").html("Gabinet nr: " + message.GABINET_NUMER);
+                    $("#numerek").fadeIn(200);
                 }
             };
 
@@ -193,7 +235,7 @@
                 dzwiek.load();
                 $("#numerPacjenta").html("");
                 $("#nazwaGabinetu").html("");
-                $("#numerek").css("display", "none");
+                $("#numerek").fadeOut(200);
             };
 
             var AtuWezwani = $("#AtuWezwani");
@@ -230,14 +272,14 @@
 
                 if (opcjeWindow.css("display") == "none") {
                     $(".body-content").addClass("oknoOpcjiAktywne");
-                   opcjeWindow.css("display", "block");
+                    opcjeWindow.fadeIn(200);
                 }
                 else {
                     $(".body-content").removeClass("oknoOpcjiAktywne");
-                    opcjeWindow.css("display", "none");
+                    opcjeWindow.fadeOut(200);
                 }
             }
         });
     });
-    </script>
-}
+        </script>
+    }

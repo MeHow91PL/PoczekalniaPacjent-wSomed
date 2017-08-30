@@ -11,80 +11,98 @@ namespace Poczekalniav1.Infrastructure
 {
     public class NasluchBazy
     {
-        List<ProszonyPacjentModel> listaWezwanych = new List<ProszonyPacjentModel>();
+        static List<ProszonyPacjentModel> listaWezwanych = new List<ProszonyPacjentModel>();
         static Queue<ProszonyPacjentModel> kolejkaWezwań = new Queue<ProszonyPacjentModel>();
         IHubContext context = GlobalHost.ConnectionManager.GetHubContext<TestHub>();
+        DbManager db = new OracleDbManager();
 
-        public void initApp(List<ProszonyPacjentModel> listaWezwanych)
+        public void initApp()
         {
-            this.listaWezwanych = listaWezwanych;
             WyswietlaczManager wysManager = new WyswietlaczManager();
             this.AddedNewNumber += wysManager.AddedNewNumber;
             this.RemovedNumber += wysManager.RemovedNumber;
-            //this.ChangedDataBase += wysManager.ChangrdDataBase;
-            Timer timer1 = new Timer(1000);
+            this.DisconnectedFromDb += wysManager.ShowDbSettings;
+            this.DbConnectionResumed += wysManager.DbConnResumed;
+
+            Timer timer1 = new Timer(5000);
             timer1.Elapsed += Timer1_Elapsed;
             timer1.Start();
         }
-
+        #region Events
         public delegate void ChangedDbEventHandler(object o, ChangedDbEventArgs e);
         public event ChangedDbEventHandler AddedNewNumber;
-        public event ChangedDbEventHandler RemovedNumber;
-        //public event ChangedDbEventHandler ChangedDataBase;
-
         protected virtual void OnAddedNewNumber(ProszonyPacjentModel ZmienionyRecord, List<ProszonyPacjentModel> listaWezwanych)
         {
-            if (AddedNewNumber != null)
+            AddedNewNumber?.Invoke(this, new ChangedDbEventArgs
             {
-                AddedNewNumber(this, new ChangedDbEventArgs
-                {
-                    ZmienionyRecord = ZmienionyRecord,
-                    AktualnieWzywani = listaWezwanych
-                });
-            }
+                ZmienionyRecord = ZmienionyRecord,
+                AktualnieWzywani = listaWezwanych
+            });
         }
-
+        public event ChangedDbEventHandler RemovedNumber;
         protected virtual void OnRemovedNumber(ProszonyPacjentModel ZmienionyRecord, List<ProszonyPacjentModel> listaWezwanych)
         {
-            if (RemovedNumber != null)
+            RemovedNumber?.Invoke(this, new ChangedDbEventArgs
             {
-                RemovedNumber(this, new ChangedDbEventArgs
-                {
-                    ZmienionyRecord = ZmienionyRecord,
-                    AktualnieWzywani = listaWezwanych
-                });
-            }
+                ZmienionyRecord = ZmienionyRecord,
+                AktualnieWzywani = listaWezwanych
+            });
         }
 
-        //protected virtual void OnChangedDataBase(List<ProszonyPacjentModel> aktualnaLista)
-        //{
-        //    ChangedDataBase?.Invoke(this, new ChangedDbEventArgs { AktualnieWzywani = aktualnaLista });
-        //}
+        public delegate void DisconnectedFromDbEventHandler(object o, EventArgs e);
+        public event DisconnectedFromDbEventHandler DisconnectedFromDb;
+        protected virtual void OnDisconnectedFromDb()
+        {
+            DisconnectedFromDb?.Invoke(this, EventArgs.Empty);
+        }
 
-        OracleDbManager db = new OracleDbManager();
+        public delegate void DbConnectionResumedEventHandler(object o, EventArgs e);
+        public event DbConnectionResumedEventHandler DbConnectionResumed;
+        protected virtual void OnDbConnectionResumed()
+        {
+            DbConnectionResumed?.Invoke(this, EventArgs.Empty);
+        }
+        #endregion
 
+        bool utraconoPolaczenie = false;
         private void Timer1_Elapsed(object sender, ElapsedEventArgs e)
         {
-
-            if (db.IloscProszonychPacjentow > 0 || listaWezwanych.Count > 0)
+            if (!db.CzyPolaczonoPoprawnie())
             {
-                foreach (var item in db.PobierzProszonychPacjentow())
+                if (utraconoPolaczenie == false)
                 {
-                    if (!listaWezwanych.Any(l => l.NUMER_DZIENNY == item.NUMER_DZIENNY))
-                    {
-                        listaWezwanych.Add(item);
-                        OnAddedNewNumber(item, db.PobierzProszonychPacjentow());
-                    }
+                    OnDisconnectedFromDb();
+                }
+                utraconoPolaczenie = true;
+            }
+            else
+            {
+                if (utraconoPolaczenie)
+                {
+                    OnDbConnectionResumed();
+                    utraconoPolaczenie = false;
                 }
 
-                foreach (var item in listaWezwanych)
+                if (db.IloscProszonychPacjentow > 0 || listaWezwanych.Count > 0)
                 {
-                    if (!db.PobierzProszonychPacjentow().Any(l => l.NUMER_DZIENNY == item.NUMER_DZIENNY))
+                    foreach (var item in db.PobierzProszonychPacjentow())
                     {
-                        OnRemovedNumber(item, db.PobierzProszonychPacjentow());
+                        if (!listaWezwanych.Any(l => l.NUMER_DZIENNY == item.NUMER_DZIENNY))
+                        {
+                            listaWezwanych.Add(item);
+                            OnAddedNewNumber(item, db.PobierzProszonychPacjentow());
+                        }
                     }
+
+                    foreach (var item in listaWezwanych)
+                    {
+                        if (!db.PobierzProszonychPacjentow().Any(l => l.NUMER_DZIENNY == item.NUMER_DZIENNY))
+                        {
+                            OnRemovedNumber(item, db.PobierzProszonychPacjentow());
+                        }
+                    }
+                    listaWezwanych = db.PobierzProszonychPacjentow().FindAll(w => listaWezwanych.Exists(l => l.NUMER_DZIENNY == w.NUMER_DZIENNY));
                 }
-                listaWezwanych = db.PobierzProszonychPacjentow().FindAll(w => listaWezwanych.Exists(l => l.NUMER_DZIENNY == w.NUMER_DZIENNY));
             }
         }
     }

@@ -29,7 +29,7 @@ namespace Poczekalniav1.Infrastructure
             {
                 _aktualnieWyswietlanyNumer = _ListaDoWyswietlenia[0];
                 context.Clients.All.wyswietlNr(_aktualnieWyswietlanyNumer, "Wyświetlony: " + e.SignalTime.Millisecond);
-                System.Threading.Thread.Sleep(10000);
+                System.Threading.Thread.Sleep(OpcjeAplikacjiManager.WzywanyNumer.CzasWyswietlania * 1000);
                 context.Clients.All.aktuKolejkeDoWezwania(_listaWezwanychPacjentow, gabinety(_listaWezwanychPacjentow));
                 context.Clients.All.ukryjNr(_aktualnieWyswietlanyNumer, "Ukryty: " + e.SignalTime.Millisecond);
                 _ListaDoWyswietlenia.Remove(_aktualnieWyswietlanyNumer);
@@ -55,6 +55,16 @@ namespace Poczekalniav1.Infrastructure
             context.Clients.All.aktuKolejkeDoWezwania(e.AktualnieWzywani, gabinety(e.AktualnieWzywani));
         }
 
+        public void ShowDbSettings(object o, EventArgs e)
+        {
+            context.Clients.All.addLogMessage("Utracono połączenie z bazą danych. Czas: " + DateTime.Now);
+        }
+
+        public void DbConnResumed(object o, EventArgs e)
+        {
+            context.Clients.All.addLogMessage("Wznowiono połączenie z bazą danych. Czas: " + DateTime.Now);
+        }
+
         internal static void RefreshNumberList(string clientId, List<ProszonyPacjentModel> AktualnieWzywani)
         {
             context.Clients.Client(clientId).aktuKolejkeDoWezwania(AktualnieWzywani, gabinety(AktualnieWzywani));
@@ -71,7 +81,7 @@ namespace Poczekalniav1.Infrastructure
             {
                 if (!gabinety.Exists(g => g.Id == item.GABINET_ID))
                 {
-                    gabinety.Add(new Gabinet { Id = item.GABINET_ID, Nazwa = item.GABINET_NAZWA });
+                    gabinety.Add(new Gabinet { Id = item.GABINET_ID, Numer = item.GABINET_NUMER, Nazwa = item.GABINET_NAZWA });
                 }
             }
             return gabinety;
@@ -80,6 +90,7 @@ namespace Poczekalniav1.Infrastructure
         public class Gabinet
         {
             public int Id { get; set; }
+            public string Numer { get; set; }
             public string Nazwa { get; set; }
         }
     }
