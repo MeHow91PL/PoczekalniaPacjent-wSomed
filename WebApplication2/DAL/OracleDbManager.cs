@@ -35,10 +35,6 @@ namespace Poczekalniav1.DAL
             {
                 try
                 {
-                    using (OracDbContext db = new OracDbContext())
-                    {
-                        db.Database.SqlQuery<ProszonyPacjentModel>("select count(*) from PROSZENI_PACJENCI");
-                    }
                     return true;
                 }
                 catch (Exception) { return false; }
@@ -83,13 +79,14 @@ namespace Poczekalniav1.DAL
                     List<ProszonyPacjentModel> t =
                             db.Database.SqlQuery<ProszonyPacjentModel>("select p.GABINET_ID, p.GABINET_NAZWA, p.GABINET_NUMER, p.NUMER_DZIENNY, to_char(d.GODZINA, 'HH24:MI') as GODZINA " +
                                 "from PROSZENI_PACJENCI p join PACJENCI_NA_DZIS d on (d.NUMER_DZIENNY = p.NUMER_DZIENNY)").ToList();
-                    lastCorrectList.Clear();
-                    lastCorrectList.AddRange(t);
+                    //lastCorrectList.Clear();
+                    //lastCorrectList.AddRange(t);
                     return t;
                 }
                 else
                 {
-                    return lastCorrectList;
+                    //return lastCorrectList;
+                    return new List<ProszonyPacjentModel>();
                 }
             }
         }
