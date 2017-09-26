@@ -1,12 +1,9 @@
-﻿using System;
+﻿using Poczekalniav1.Infrastructure;
+using Poczekalniav1.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
-using System.Web;
-using Poczekalniav1.Models;
-using Poczekalniav1.Infrastructure;
-using static Poczekalniav1.Controllers.HomeController;
 
 namespace Poczekalniav1.DAL
 {
@@ -38,8 +35,10 @@ namespace Poczekalniav1.DAL
             {
                 try
                 {
-                    bd1.Database.Connection.Open();
-                    bd1.Database.Connection.Close();
+                    using (OracDbContext db = new OracDbContext())
+                    {
+                        db.Database.SqlQuery<ProszonyPacjentModel>("select count(*) from PROSZENI_PACJENCI");
+                    }
                     return true;
                 }
                 catch (Exception) { return false; }
@@ -73,6 +72,7 @@ namespace Poczekalniav1.DAL
             throw new NotImplementedException();
         }
 
+        private static List<ProszonyPacjentModel> lastCorrectList;
         public override List<ProszonyPacjentModel> PobierzProszonychPacjentow()
         {
             using (OracDbContext db = new OracDbContext())
@@ -83,11 +83,13 @@ namespace Poczekalniav1.DAL
                     List<ProszonyPacjentModel> t =
                             db.Database.SqlQuery<ProszonyPacjentModel>("select p.GABINET_ID, p.GABINET_NAZWA, p.GABINET_NUMER, p.NUMER_DZIENNY, to_char(d.GODZINA, 'HH24:MI') as GODZINA " +
                                 "from PROSZENI_PACJENCI p join PACJENCI_NA_DZIS d on (d.NUMER_DZIENNY = p.NUMER_DZIENNY)").ToList();
+                    lastCorrectList.Clear();
+                    lastCorrectList.AddRange(t);
                     return t;
                 }
                 else
                 {
-                    return new List<ProszonyPacjentModel>();
+                    return lastCorrectList;
                 }
             }
         }
